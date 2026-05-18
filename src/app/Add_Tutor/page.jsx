@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { authClient } from "@/app/lib/auth-client";
 import { createTutor } from "@/app/lib/data";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
 
@@ -25,6 +26,9 @@ const inputClass =
 
 export default function AddTutorPage() {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log(user, "user");
 
   const [sessionStartDate, setSessionStartDate] = useState("");
   const [sessionEndDate, setSessionEndDate] = useState("");
@@ -40,7 +44,6 @@ export default function AddTutorPage() {
       setMessage("Please select session start and end dates.");
       return;
     }
-
     try {
       await createTutor({
         tutorName: formData.get("tutorName"),
@@ -54,6 +57,11 @@ export default function AddTutorPage() {
         institutionAndExperience: formData.get("institutionAndExperience"),
         location: formData.get("location"),
         teachingMode: formData.get("teachingMode"),
+        createdBy: user?.email ?? "",
+        createdBy_id: user?.id ?? "",
+        createdByName: user?.name ?? "",
+        createdByEmail: user?.email ?? "",
+        createdAt: new Date().toISOString()
       });
 
       router.push("/Tutors");
