@@ -1,11 +1,64 @@
-import React from 'react';
+"use client";
+import Link from "next/link";
 
-const login = () => {
-    return (
+export default function LoginPage() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    console.log(data);
+  };
+  return (
+    <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
+      <h1 className="text-3xl font-bold text-center text-[#2f4aa5]">Login</h1>
+
+      <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-md space-y-4">
         <div>
-            <h1 className='text-3xl font-bold text-center mt-10'>Login Page</h1>
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
         </div>
-    );
-};
 
-export default login;
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            placeholder="Enter your password"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full rounded-full bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#263f8b]"
+        >
+          Sign in
+        </button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-slate-600">
+        Don&apos;t have an account?{" "}
+        <Link href="/register" className="font-semibold text-[#2f4aa5] hover:underline">
+          Register
+        </Link>
+      </p>
+    </main>
+  );
+}

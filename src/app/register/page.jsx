@@ -1,11 +1,112 @@
-import React from 'react';
+"use client";
+import Link from "next/link";
 
-const register = () => {
-    return (
+export default function RegisterPage() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+    console.log(data);
+  };
+  return (
+    <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
+      <h1 className="text-3xl font-bold text-center text-[#2f4aa5]">Register</h1>
+
+      <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-md space-y-4">
         <div>
-            <h1 className='text-3xl font-bold text-center mt-10'>Register Page</h1>
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+            Full name
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            placeholder="Jane Doe"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
         </div>
-    );
-};
 
-export default register;
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+            Email
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="photoURL"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Profile photo URL
+          </label>
+          <input
+            id="photoURL"
+            name="photoURL"
+            type="url"
+            placeholder="https://example.com/photo.jpg"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            placeholder="At least 8 characters"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium text-slate-700"
+          >
+            Confirm password
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            required
+            minLength={8}
+            placeholder="Re-enter your password"
+            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full rounded-full bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#263f8b]"
+        >
+          Create account
+        </button>
+      </form>
+
+      <p className="mt-6 text-center text-sm text-slate-600">
+        Already have an account?{" "}
+        <Link href="/login" className="font-semibold text-[#2f4aa5] hover:underline">
+          Login
+        </Link>
+      </p>
+    </main>
+  );
+}
