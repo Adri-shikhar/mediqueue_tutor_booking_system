@@ -17,3 +17,15 @@ export const getTutorById = async (id) => {
   console.log("Tutor fetched successfully", data)
   return data
 }
+
+export const createTutor = async (tutor) => {
+  const response = await fetch("http://localhost:8000/tutors", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(tutor),
+  })
+  if (!response.ok) {
+    throw new Error("Failed to create tutor")
+  }
+  return response.json()
+}
