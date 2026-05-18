@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { authClient } from "@/app/lib/auth-client";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 export default function LoginPage() {
   const {data:session,error:sessionError}=authClient.useSession();
   const user=session?.user;
@@ -31,7 +32,19 @@ export default function LoginPage() {
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
       <h1 className="text-3xl font-bold text-center text-[#2f4aa5]">Login</h1>
 
-      <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-md space-y-4">
+      <div className="mx-auto mt-10 max-w-md space-y-4">
+        <GoogleSignInButton label="Sign in with Google" />
+
+        <div className="relative flex items-center py-2">
+          <div className="grow border-t border-slate-300" />
+          <span className="mx-4 shrink text-xs font-medium uppercase text-slate-500">
+            or
+          </span>
+          <div className="grow border-t border-slate-300" />
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
         <div>
           <label htmlFor="email" className="block text-sm font-medium text-slate-700">
             Email
