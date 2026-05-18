@@ -1,5 +1,4 @@
 "use client";
-
 import { authClient } from "@/app/lib/auth-client";
 import { createBooking } from "@/app/lib/data";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
@@ -17,6 +16,7 @@ import { HiOutlineCalendarDays } from "react-icons/hi2";
 
 const readOnlyInputClass =
   "cursor-default bg-slate-50 text-slate-700";
+
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";
@@ -51,6 +51,7 @@ const BookingButton = ({ tutor }) => {
       setMessage("Please select a session date.");
       return;
     }
+
 
     setIsSubmitting(true);
     try {
