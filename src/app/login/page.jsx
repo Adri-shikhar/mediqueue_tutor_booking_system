@@ -1,12 +1,31 @@
 "use client";
 import Link from "next/link";
-
+import { authClient } from "@/app/lib/auth-client";
 export default function LoginPage() {
-  const handleSubmit = (e) => {
+  const {data:session,error:sessionError}=authClient.useSession();
+  const user=session?.user;
+  
+  if (sessionError) {
+    console.error(sessionError);
+  }
+  if (session) {
+    console.log(session);
+
+  }
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    console.log(data);
+    const formDataObject = Object.fromEntries(formData);
+    const {data,error}=await authClient.signIn.email({
+      email: formDataObject.email,
+      password: formDataObject.password,
+    });
+    if (error) {
+      console.error(error);
+    }
+    if (data) {
+      console.log(data);
+    }
   };
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
