@@ -29,3 +29,15 @@ export const createTutor = async (tutor) => {
   }
   return response.json()
 }
+
+export const createBooking = async (booking) => {
+  const response = await fetch("http://localhost:8000/bookings", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(booking),
+  })
+  if (!response.ok) {
+    throw new Error("Failed to create booking")
+  }
+  return response.json()
+}

@@ -4,8 +4,11 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const CalendarIcon = ({ onDateChange, placeholderText }) => {
+const CalendarIcon = ({ onDateChange, placeholderText, minDate, maxDate }) => {
   const [selectedDate, setSelectedDate] = useState(null);
+
+  const parseBound = (dateStr) =>
+    dateStr ? new Date(`${dateStr}T00:00:00`) : undefined;
 
   const handleChange = (date) => {
     setSelectedDate(date);
@@ -26,6 +29,8 @@ const CalendarIcon = ({ onDateChange, placeholderText }) => {
       showIcon
       selected={selectedDate}
       onChange={handleChange}
+      minDate={parseBound(minDate)}
+      maxDate={parseBound(maxDate)}
       placeholderText={placeholderText}
       dateFormat="MMM d, yyyy"
       className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
@@ -34,8 +39,18 @@ const CalendarIcon = ({ onDateChange, placeholderText }) => {
   );
 };
 
-export default function SessionDatePicker({ onDateChange, placeholderText }) {
+export default function SessionDatePicker({
+  onDateChange,
+  placeholderText,
+  minDate,
+  maxDate,
+}) {
   return (
-    <CalendarIcon onDateChange={onDateChange} placeholderText={placeholderText} />
+    <CalendarIcon
+      onDateChange={onDateChange}
+      placeholderText={placeholderText}
+      minDate={minDate}
+      maxDate={maxDate}
+    />
   );
 }

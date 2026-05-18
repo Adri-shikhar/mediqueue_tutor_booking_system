@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTutorById } from "../../lib/data";
+import BookingButton from "@/components/Actionbutton/booking_button";
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";
@@ -33,6 +34,8 @@ function DetailItem({ label, value }) {
 export default async function TutorDetails({ params }) {
   const { id } = await params;
   const tutor = await getTutorById(id);
+  console.log(tutor, "tutor");
+
 
   if (!tutor) {
     notFound();
@@ -113,12 +116,7 @@ export default async function TutorDetails({ params }) {
             />
           </dl>
 
-          <button
-            type="button"
-            className="mt-8 w-full rounded-full bg-[#2f4aa5] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#263f8b] sm:max-w-xs"
-          >
-            Book session
-          </button>
+        <BookingButton tutor={tutor} />
         </section>
       </article>
     </main>
