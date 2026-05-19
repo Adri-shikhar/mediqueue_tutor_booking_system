@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# MediQueue — Tutor Booking System
 
-## Getting Started
+**Live site:** [https://mediqueue-tutor-booking-system.vercel.app/](https://mediqueue-tutor-booking-system.vercel.app/)
 
-First, run the development server:
+MediQueue is a full-stack tutor booking web application. Students can register, browse tutors, book learning sessions, and manage bookings. Tutors can list profiles with availability, slot limits, and session dates. The platform uses digital session management with real-time slot tracking.
+
+---
+
+## Features
+
+- **User authentication** — Email/password registration and login, plus Google sign-in (Better Auth + MongoDB).
+- **Tutor discovery** — Public home page with carousel, featured tutors, and a searchable tutors directory with case-insensitive name search (`$regex`) and registration date filtering (`$gte` / `$lte`).
+- **Session booking** — Book sessions from tutor detail pages; slots decrease automatically on booking and restore when a booking is cancelled.
+- **Dashboards** — **My Tutors** (create, edit, delete your listings) and **My Booked Sessions** (view and cancel your bookings in a table layout).
+- **Modern UX** — Dark/light theme toggle, toast notifications, loading states, protected routes, smooth page animations (Framer Motion), and Flowbite UI components.
+- **Responsive design** — Works on mobile, tablet, and desktop with a consistent MediQueue brand style.
+
+---
+
+## Tech stack
+
+| Layer | Technologies |
+|--------|----------------|
+| Frontend | Next.js 16, React 19, Tailwind CSS 4, HeroUI, Flowbite React, Framer Motion |
+| Auth | Better Auth |
+| Backend API | Express.js, MongoDB (separate server repo) |
+| Deployment | Vercel (client) |
+
+---
+
+## Run locally
+
+### Prerequisites
+
+- Node.js 18+
+- MongoDB (Atlas or local)
+- Express API running (default: `http://localhost:8000`)
+
+### 1. Clone and install (client)
+
+```bash
+cd mediqueue_tutor_booking_system
+npm install
+```
+
+### 2. Environment variables
+
+Create a `.env` file in the project root:
+
+```env
+BETTER_AUTH_SECRET=your-long-random-secret
+MONGODB_URI=your-mongodb-connection-string
+
+BETTER_AUTH_URL=http://localhost:3000
+BETTER_AUTH_CLIENT_URL=http://localhost:3000
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
+
+NEXT_PUBLIC_BASE_URL=http://localhost:8000
+
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+### 3. Start the API server
+
+In the `mediqueue_server` folder:
+
+```bash
+npm install
+node index.js
+```
+
+### 4. Start the Next.js app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Production (Vercel)
 
-## Learn More
+Set these in **Vercel → Project → Settings → Environment Variables**:
 
-To learn more about Next.js, take a look at the following resources:
+| Variable | Example |
+|----------|---------|
+| `BETTER_AUTH_URL` | `https://mediqueue-tutor-booking-system.vercel.app` |
+| `NEXT_PUBLIC_BETTER_AUTH_URL` | `https://mediqueue-tutor-booking-system.vercel.app` |
+| `BETTER_AUTH_CLIENT_URL` | `https://mediqueue-tutor-booking-system.vercel.app` |
+| `NEXT_PUBLIC_BASE_URL` | Your deployed Express API URL |
+| `MONGODB_URI` | MongoDB Atlas URI |
+| `BETTER_AUTH_SECRET` | Strong random secret |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | If using Google login |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Redeploy after updating env vars.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Main routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Route | Description |
+|-------|-------------|
+| `/` | Home — carousel, tutors preview, info sections |
+| `/Tutors` | All tutors + search & filter |
+| `/Tutors/[id]` | Tutor details & book session (login required) |
+| `/Add_Tutor` | Add a new tutor (login required) |
+| `/My_Tutors` | Your tutor listings (login required) |
+| `/My_Booked_Sessions` | Your bookings (login required) |
+| `/login` / `/register` | Authentication |
+| `/profile` | User profile |
+| `/privacy` | Privacy policy |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Scripts
+
+```bash
+npm run dev      # Development server
+npm run build    # Production build
+npm run start    # Start production server
+npm run lint     # ESLint
+```
+
+---
+
+## Author
+
+Assignment project — **MediQueue Tutor Booking System** (CAT_02).
