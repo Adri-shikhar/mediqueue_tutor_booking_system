@@ -12,6 +12,7 @@ export function getPageTitle(pathname) {
   if (path === "/login") return `${SITE} | Login`;
   if (path === "/register") return `${SITE} | Register`;
   if (path === "/profile") return `${SITE} | Profile`;
+  if (path === "/privacy") return `${SITE} | Privacy Policy`;
 
   return `${SITE} | Page Not Found`;
 }
