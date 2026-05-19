@@ -6,6 +6,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { authClient } from "@/app/lib/auth-client";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import MqButton from "@/components/flowbite/MqButton";
+import MqCard from "@/components/flowbite/MqCard";
+import FadeIn from "@/components/motion/FadeIn";
 import { getPasswordErrors } from "@/app/lib/passwordValidation";
 
 export default function RegisterPage() {
@@ -54,7 +57,11 @@ export default function RegisterPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Register</h1>
+      <FadeIn>
+        <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">
+          Register
+        </h1>
+      </FadeIn>
 
       <div className="mx-auto mt-10 max-w-md space-y-4">
         <GoogleSignInButton label="Sign up with Google" />
@@ -68,7 +75,9 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
+      <FadeIn delay={0.1}>
+      <MqCard className="mx-auto max-w-md !p-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Full name
@@ -159,13 +168,12 @@ export default function RegisterPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full rounded-full bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#263f8b]"
-        >
+        <MqButton type="submit" className="w-full">
           Create account
-        </button>
+        </MqButton>
       </form>
+      </MqCard>
+      </FadeIn>
 
       <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
         Already have an account?{" "}

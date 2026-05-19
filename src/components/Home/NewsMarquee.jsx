@@ -1,5 +1,9 @@
 "use client";
 
+import FadeIn from "@/components/motion/FadeIn";
+import { motion } from "framer-motion";
+import { easeSmooth } from "@/components/motion/motionVariants";
+
 const newsItems = [
   "New tutors added in Computer Science and Mathematics this week!",
   "Book evening slots Sun–Thu — flexible times for working students.",
@@ -11,17 +15,23 @@ export default function NewsMarquee() {
   const text = newsItems.join("   •   ");
 
   return (
-    <section className="mt-6 flex overflow-hidden rounded-xl border border-[#2f4aa5]/20 bg-[#eef7ff] shadow-sm dark:border-[#8fb0ff]/30 dark:bg-[#1a2440]">
-      <div className="flex shrink-0 items-center gap-2 bg-[#2f4aa5] px-4 py-3 text-sm font-bold uppercase tracking-wide text-white">
-        <span aria-hidden>📢</span>
-        Latest
-      </div>
-      <div className="relative flex-1 overflow-hidden py-3">
-        <div className="animate-marquee whitespace-nowrap text-sm font-medium text-[#2f4aa5]">
-          <span>{text}</span>
-          <span className="mx-12">{text}</span>
+    <FadeIn delay={0.15}>
+      <motion.section
+        whileHover={{ scale: 1.01 }}
+        transition={{ duration: 0.25, ease: easeSmooth }}
+        className="mt-6 flex overflow-hidden rounded-xl border border-[#2f4aa5]/20 bg-[#eef7ff] shadow-sm dark:border-[#8fb0ff]/30 dark:bg-[#1a2440]"
+      >
+        <div className="flex shrink-0 items-center gap-2 bg-[#2f4aa5] px-4 py-3 text-sm font-bold uppercase tracking-wide text-white">
+          <span aria-hidden>📢</span>
+          Latest
         </div>
-      </div>
-    </section>
+        <div className="relative flex-1 overflow-hidden py-3">
+          <div className="animate-marquee whitespace-nowrap text-sm font-medium text-[#2f4aa5] dark:text-[#8fb0ff]">
+            <span>{text}</span>
+            <span className="mx-12">{text}</span>
+          </div>
+        </div>
+      </motion.section>
+    </FadeIn>
   );
 }

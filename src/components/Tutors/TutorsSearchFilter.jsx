@@ -1,5 +1,7 @@
 "use client";
 
+import MqButton from "@/components/flowbite/MqButton";
+import FadeIn from "@/components/motion/FadeIn";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -38,6 +40,7 @@ export default function TutorsSearchFilter() {
     "mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100";
 
   return (
+    <FadeIn>
     <form
       onSubmit={applyFilters}
       className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]"
@@ -102,20 +105,12 @@ export default function TutorsSearchFilter() {
       </div>
 
       <div className="mt-5 flex flex-wrap gap-3">
-        <button
-          type="submit"
-          className="rounded-full bg-[#2f4aa5] px-5 py-2 text-sm font-semibold text-white hover:bg-[#263f8b] dark:bg-blue-500 dark:hover:bg-blue-600"
-        >
-          Apply
-        </button>
-        <button
-          type="button"
-          onClick={clearFilters}
-          className="rounded-full border border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 dark:border-[#2a3655] dark:text-slate-200 dark:hover:bg-[#1a2440]"
-        >
+        <MqButton type="submit">Apply</MqButton>
+        <MqButton type="button" variant="outline" onClick={clearFilters}>
           Clear
-        </button>
+        </MqButton>
       </div>
     </form>
+    </FadeIn>
   );
 }

@@ -1,10 +1,11 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar/navbar";
-import Footer from "@/components/Footer/footer";
+import AnimatedNavbar from "@/components/Navbar/AnimatedNavbar";
+import AnimatedFooter from "@/components/Footer/AnimatedFooter";
 import AppProviders from "@/components/providers/AppProviders";
 import DynamicTitle from "@/components/layout/DynamicTitle";
 import ThemeScript from "@/components/layout/ThemeScript";
+import PageTransition from "@/components/motion/PageTransition";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,9 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <AppProviders>
           <DynamicTitle />
-          <Navbar />
-          {children}
-          <Footer />
+          <AnimatedNavbar />
+          <PageTransition>{children}</PageTransition>
+          <AnimatedFooter />
         </AppProviders>
       </body>
     </html>

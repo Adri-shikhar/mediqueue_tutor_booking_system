@@ -1,8 +1,9 @@
 import { toId } from "@/app/lib/helpers";
 import { canBook } from "@/app/lib/slots";
+import MqButton from "@/components/flowbite/MqButton";
+import AnimatedCard from "@/components/motion/AnimatedCard";
 import SlotBadge from "@/components/Tutor/SlotBadge";
 import Image from "next/image";
-import Link from "next/link";
 
 function formatDate(dateStr) {
   if (!dateStr) return "—";
@@ -41,16 +42,16 @@ export default function TutorsGrid({ tutors, emptyMessage }) {
 
   return (
     <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {tutors.map((tutor) => {
+      {tutors.map((tutor, index) => {
         const tutorId = toId(tutor._id);
         const modeClass =
           teachingModeStyles[tutor.teachingMode] ??
           "bg-slate-100 text-slate-700 ring-slate-200 dark:bg-slate-700 dark:text-slate-200";
 
         return (
+          <AnimatedCard key={tutorId} index={index} className="h-full">
           <article
-            key={tutorId}
-            className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md dark:border-[#2a3655] dark:bg-[#151c2f]"
+            className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]"
           >
             <div className="border-b border-slate-100 bg-gradient-to-b from-[#eef7ff] to-white px-5 pb-4 pt-6 dark:border-[#2a3655] dark:from-[#1a2440] dark:to-[#151c2f]">
               <div className="relative mx-auto w-fit">
@@ -117,12 +118,9 @@ export default function TutorsGrid({ tutors, emptyMessage }) {
               </dl>
 
               {canBook(tutor) ? (
-                <Link
-                  href={`/Tutors/${tutorId}`}
-                  className="mt-5 w-full rounded-full bg-[#2f4aa5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#263f8b] dark:bg-blue-500 dark:hover:bg-blue-600"
-                >
+                <MqButton href={`/Tutors/${tutorId}`} className="mt-5 w-full">
                   Book session
-                </Link>
+                </MqButton>
               ) : (
                 <span className="mt-5 block w-full cursor-not-allowed rounded-full bg-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-600 dark:bg-slate-600 dark:text-slate-300">
                   Fully booked
@@ -130,6 +128,7 @@ export default function TutorsGrid({ tutors, emptyMessage }) {
               )}
             </div>
           </article>
+          </AnimatedCard>
         );
       })}
     </div>

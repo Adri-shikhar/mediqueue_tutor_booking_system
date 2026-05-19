@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/app/lib/auth-client";
+import MqButton from "@/components/flowbite/MqButton";
 import ProfileDropdown from "@/components/Navbar/ProfileDropdown";
 import ThemeToggle from "@/components/Navbar/ThemeToggle";
 import { mqNavBar } from "@/app/lib/theme";
@@ -64,18 +65,12 @@ const Navbar = () => {
             <ProfileDropdown user={user} />
           ) : (
             <>
-              <Link
-                className="rounded-full border border-[#2f4aa5] px-4 py-2 text-sm font-semibold text-[#2f4aa5] transition hover:-translate-y-0.5 hover:bg-[#2f4aa5]/10 dark:border-[#8fb0ff] dark:text-[#8fb0ff] dark:hover:bg-[#1a2440]"
-                href="/login"
-              >
+              <MqButton href="/login" variant="outline" className="!px-4 !py-2 !text-sm">
                 Login
-              </Link>
-              <Link
-                className="rounded-full bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#263f8b]"
-                href="/register"
-              >
+              </MqButton>
+              <MqButton href="/register" className="!px-4 !py-2 !text-sm">
                 Register
-              </Link>
+              </MqButton>
             </>
           )}
         </div>

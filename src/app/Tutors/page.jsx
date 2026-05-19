@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
 import { getTutors } from "../lib/data";
+import TutorsPageHeader from "@/components/Tutors/TutorsPageHeader";
 import TutorsSearchFilter from "@/components/Tutors/TutorsSearchFilter";
 import TutorsGrid from "@/components/Tutors/TutorsGrid";
 import LoadingSpinner from "@/components/ui/LoadingSpinner";
@@ -25,12 +26,7 @@ export default async function TutorsPage({ searchParams }) {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-blue-300">
-        Our Tutors
-      </h1>
-      <p className="mt-2 text-center text-slate-600 dark:text-slate-400">
-        Browse tutors and book a session that fits your schedule.
-      </p>
+      <TutorsPageHeader />
 
       <Suspense
         fallback={

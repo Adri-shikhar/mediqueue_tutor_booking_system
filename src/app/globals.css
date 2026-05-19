@@ -1,7 +1,14 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@plugin "flowbite/plugin";
+@source "../../node_modules/flowbite";
+@source "../../node_modules/flowbite-react";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+html {
+  scroll-behavior: smooth;
+}
 
 /* MediQueue theme tokens */
 :root {
@@ -116,4 +123,18 @@ html.dark .react-datepicker__day:hover {
 .animate-marquee {
   display: inline-block;
   animation: marquee 30s linear infinite;
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-float-soft {
+  animation: float-soft 4s ease-in-out infinite;
 }

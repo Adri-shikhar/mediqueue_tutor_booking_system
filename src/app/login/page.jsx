@@ -5,6 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { authClient } from "@/app/lib/auth-client";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import MqButton from "@/components/flowbite/MqButton";
+import MqCard from "@/components/flowbite/MqCard";
+import FadeIn from "@/components/motion/FadeIn";
 
 function safeCallbackUrl(raw) {
   if (!raw || typeof raw !== "string") return "/";
@@ -50,7 +53,11 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Login</h1>
+      <FadeIn>
+        <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">
+          Login
+        </h1>
+      </FadeIn>
 
       {user ? (
         <p className="mx-auto mt-6 max-w-md text-center text-slate-600 dark:text-slate-400">
@@ -76,7 +83,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
+      <FadeIn delay={0.1}>
+      <MqCard className="mx-auto max-w-md !p-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
             htmlFor="email"
@@ -121,13 +130,12 @@ export default function LoginPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full rounded-full bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#263f8b]"
-        >
+        <MqButton type="submit" className="w-full">
           Sign in
-        </button>
+        </MqButton>
       </form>
+      </MqCard>
+      </FadeIn>
 
       <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
         Don&apos;t have an account?{" "}

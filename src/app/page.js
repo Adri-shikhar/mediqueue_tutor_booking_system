@@ -1,13 +1,15 @@
 export const dynamic = "force-dynamic";
 
-import Link from "next/link";
 import { getTutorsWithLimit } from "@/app/lib/data";
 import { toId } from "@/app/lib/helpers";
+import MqButton from "@/components/flowbite/MqButton";
 import HeroCarousel from "@/components/Home/HeroCarousel";
 import HomeTutorCard from "@/components/Home/HomeTutorCard";
 import HowItWorks from "@/components/Home/HowItWorks";
 import NewsMarquee from "@/components/Home/NewsMarquee";
 import WhyMediqueue from "@/components/Home/WhyMediqueue";
+import AnimatedCard from "@/components/motion/AnimatedCard";
+import FadeIn from "@/components/motion/FadeIn";
 
 export default async function Home() {
   const tutors = await getTutorsWithLimit(6);
@@ -18,27 +20,30 @@ export default async function Home() {
       <NewsMarquee />
 
       <section className="mt-16">
-        <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+        <FadeIn className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div>
-            <h2 className="text-2xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Available Tutors</h2>
+            <h2 className="text-2xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">
+              Available Tutors
+            </h2>
             <p className="mt-1 text-slate-600 dark:text-slate-400">
               Top tutors from our database — book a session today.
             </p>
           </div>
-          <Link
-            href="/Tutors"
-            className="rounded-full border border-[#2f4aa5] px-5 py-2 text-sm font-semibold text-[#2f4aa5] hover:bg-[#eef7ff] dark:border-[#8fb0ff] dark:text-[#8fb0ff] dark:hover:bg-[#1a2440]"
-          >
+          <MqButton href="/Tutors" variant="outline">
             View all tutors
-          </Link>
-        </div>
+          </MqButton>
+        </FadeIn>
 
         {tutors.length === 0 ? (
-          <p className="mt-8 text-center text-slate-500">No tutors available yet.</p>
+          <p className="mt-8 text-center text-slate-500 dark:text-slate-400">
+            No tutors available yet.
+          </p>
         ) : (
           <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {tutors.map((tutor) => (
-              <HomeTutorCard key={toId(tutor._id)} tutor={tutor} />
+            {tutors.map((tutor, index) => (
+              <AnimatedCard key={toId(tutor._id)} index={index}>
+                <HomeTutorCard tutor={tutor} />
+              </AnimatedCard>
             ))}
           </div>
         )}
