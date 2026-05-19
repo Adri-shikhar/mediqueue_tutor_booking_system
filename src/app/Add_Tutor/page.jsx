@@ -7,6 +7,7 @@ import { createTutor } from "@/app/lib/data";
 import { toId } from "@/app/lib/helpers";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
 import { toast } from "react-toastify";
+import { mqCard, mqHeading, mqInput } from "@/app/lib/theme";
 
 const SUBJECTS = [
   "Mathematics",
@@ -23,8 +24,7 @@ const SUBJECTS = [
 
 const TEACHING_MODES = ["Online", "Offline", "Both"];
 
-const inputClass =
-  "mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]";
+const inputClass = mqInput.replace("mt-1 ", "");
 
 export default function AddTutorPage() {
   const router = useRouter();
@@ -83,7 +83,7 @@ export default function AddTutorPage() {
       </h1>
       <form
         onSubmit={handleSubmit}
-        className="mx-auto mt-8 max-w-2xl space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+        className={`mx-auto mt-8 max-w-2xl space-y-4 p-6 ${mqCard}`}
       >
         <div>
           <label

@@ -1,6 +1,101 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* MediQueue theme tokens */
+:root {
+  --mq-page: #f0f6fc;
+  --mq-surface: #ffffff;
+  --mq-muted: #eef7ff;
+  --mq-border: #e2e8f0;
+  --mq-text: #0f172a;
+  --mq-text-muted: #64748b;
+  --mq-accent: #2f4aa5;
+  --mq-accent-hover: #263f8b;
+}
+
+html.dark {
+  color-scheme: dark;
+  --mq-page: #0b1120;
+  --mq-surface: #151c2f;
+  --mq-muted: #1a2440;
+  --mq-border: #2a3655;
+  --mq-text: #e8eef8;
+  --mq-text-muted: #9aa8c4;
+  --mq-accent: #8fb0ff;
+  --mq-accent-hover: #a8c4ff;
+}
+
+body {
+  background-color: var(--mq-page);
+  color: var(--mq-text);
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
+}
+
+/* Catch remaining light utilities in dark mode */
+html.dark .bg-white {
+  background-color: var(--mq-surface) !important;
+}
+
+html.dark .bg-slate-50 {
+  background-color: var(--mq-muted) !important;
+}
+
+html.dark .text-slate-900 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+
+html.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-500 {
+  color: #64748b !important;
+}
+
+html.dark .border-slate-100,
+html.dark .border-slate-200 {
+  border-color: var(--mq-border) !important;
+}
+
+html.dark .border-slate-300 {
+  border-color: #3d4f6f !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: var(--mq-muted);
+  color: var(--mq-text);
+  border-color: var(--mq-border);
+}
+
+html.dark .react-datepicker {
+  background-color: var(--mq-surface);
+  color: var(--mq-text);
+  border-color: var(--mq-border);
+}
+
+html.dark .react-datepicker__header {
+  background-color: var(--mq-muted);
+  border-color: var(--mq-border);
+}
+
+html.dark .react-datepicker__day:hover {
+  background-color: var(--mq-muted);
+}
+
 .react-datepicker-wrapper {
   width: 100%;
 }
@@ -21,4 +116,4 @@
 .animate-marquee {
   display: inline-block;
   animation: marquee 30s linear infinite;
-} 
+}

@@ -2,8 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar/navbar";
 import Footer from "@/components/Footer/footer";
-import ToastProvider from "@/components/Toast/ToastProvider";
+import AppProviders from "@/components/providers/AppProviders";
 import DynamicTitle from "@/components/layout/DynamicTitle";
+import ThemeScript from "@/components/layout/ThemeScript";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,14 +25,19 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full flex flex-col">
-        <DynamicTitle />
-        <Navbar />
-        {children}
-        <Footer />
-        <ToastProvider />
+        <AppProviders>
+          <DynamicTitle />
+          <Navbar />
+          {children}
+          <Footer />
+        </AppProviders>
       </body>
     </html>
   );

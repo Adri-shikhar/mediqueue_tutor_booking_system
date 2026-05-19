@@ -2,8 +2,11 @@
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useTheme } from "@/contexts/ThemeProvider";
 
 export default function ToastProvider() {
+  const { isDark } = useTheme();
+
   return (
     <ToastContainer
       position="top-right"
@@ -12,7 +15,7 @@ export default function ToastProvider() {
       newestOnTop
       closeOnClick
       pauseOnHover
-      theme="light"
+      theme={isDark ? "dark" : "light"}
     />
   );
 }

@@ -13,10 +13,10 @@ export default async function MyBookedSessionsPage() {
   if (!user?.id) {
     return (
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-        <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">
+        <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">
           My Booked Sessions
         </h1>
-        <p className="mt-6 text-center text-slate-600">
+        <p className="mt-6 text-center text-slate-600 dark:text-slate-400">
           <Link
             href="/login"
             className="font-semibold text-[#2f4aa5] hover:underline"
@@ -33,10 +33,10 @@ export default async function MyBookedSessionsPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">
         My Booked Sessions
       </h1>
-      <p className="mt-2 text-center text-slate-600">
+      <p className="mt-2 text-center text-slate-600 dark:text-slate-400">
         Signed in as {user.name || user.email}
       </p>
 

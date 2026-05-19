@@ -20,14 +20,14 @@ export default async function Home() {
       <section className="mt-16">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div>
-            <h2 className="text-2xl font-bold text-[#2f4aa5]">Available Tutors</h2>
-            <p className="mt-1 text-slate-600">
+            <h2 className="text-2xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Available Tutors</h2>
+            <p className="mt-1 text-slate-600 dark:text-slate-400">
               Top tutors from our database — book a session today.
             </p>
           </div>
           <Link
             href="/Tutors"
-            className="rounded-full border border-[#2f4aa5] px-5 py-2 text-sm font-semibold text-[#2f4aa5] hover:bg-[#eef7ff]"
+            className="rounded-full border border-[#2f4aa5] px-5 py-2 text-sm font-semibold text-[#2f4aa5] hover:bg-[#eef7ff] dark:border-[#8fb0ff] dark:text-[#8fb0ff] dark:hover:bg-[#1a2440]"
           >
             View all tutors
           </Link>

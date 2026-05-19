@@ -33,9 +33,9 @@ export default async function ProfilePage() {
 
   return (
     <main className="mx-auto w-full max-w-lg flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">My Profile</h1>
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">My Profile</h1>
 
-      <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]">
         <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-6">
           {photo ? (
             <img
@@ -70,7 +70,7 @@ export default async function ProfilePage() {
         <div className="mt-8 flex flex-wrap justify-center gap-3 sm:justify-start">
           <Link
             href="/My_Booked_Sessions"
-            className="rounded-full border border-[#2f4aa5] px-4 py-2 text-sm font-semibold text-[#2f4aa5] hover:bg-[#eef7ff]"
+            className="rounded-full border border-[#2f4aa5] px-4 py-2 text-sm font-semibold text-[#2f4aa5] hover:bg-[#eef7ff] dark:border-[#8fb0ff] dark:text-[#8fb0ff] dark:hover:bg-[#1a2440]"
           >
             My sessions
           </Link>

@@ -1,9 +1,18 @@
 // All API calls go to Express server on port 8000
 const API_URL = "http://localhost:8000";
 
-// GET all tutors
-export async function getTutors() {
-  const response = await fetch(`${API_URL}/tutors`);
+// GET all tutors (optional search + registration date filter)
+export async function getTutors({ name, registrationStart, registrationEnd } = {}) {
+  const params = new URLSearchParams();
+
+  if (name?.trim()) params.set("name", name.trim());
+  if (registrationStart) params.set("registrationStart", registrationStart);
+  if (registrationEnd) params.set("registrationEnd", registrationEnd);
+
+  const query = params.toString();
+  const url = query ? `${API_URL}/tutors?${query}` : `${API_URL}/tutors`;
+
+  const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("Failed to fetch tutors");
   return response.json();
 }

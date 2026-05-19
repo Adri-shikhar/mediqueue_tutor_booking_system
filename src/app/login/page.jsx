@@ -50,10 +50,10 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">Login</h1>
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Login</h1>
 
       {user ? (
-        <p className="mx-auto mt-6 max-w-md text-center text-slate-600">
+        <p className="mx-auto mt-6 max-w-md text-center text-slate-600 dark:text-slate-400">
           You are already signed in.{" "}
           <Link
             href="/My_Booked_Sessions"
@@ -80,7 +80,7 @@ export default function LoginPage() {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             Email
           </label>
@@ -90,7 +90,7 @@ export default function LoginPage() {
             type="email"
             required
             placeholder="you@example.com"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
@@ -98,7 +98,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-slate-700"
+              className="block text-sm font-medium text-slate-700 dark:text-slate-300"
             >
               Password
             </label>
@@ -117,7 +117,7 @@ export default function LoginPage() {
             required
             minLength={6}
             placeholder="Enter your password"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
@@ -129,7 +129,7 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
         Don&apos;t have an account?{" "}
         <Link
           href="/register"

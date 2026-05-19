@@ -27,7 +27,7 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto w-full border-t border-slate-200 bg-gradient-to-b from-[#eef7ff] to-white">
+    <footer className="mt-auto w-full border-t border-slate-200 bg-gradient-to-b from-[#eef7ff] to-white dark:border-[#2a3655] dark:from-[#0f1729] dark:to-[#0b1120]">
       <div className="mx-auto max-w-6xl px-6 py-14">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
           <div className="space-y-5 lg:col-span-5">
@@ -40,13 +40,13 @@ const Footer = () => {
                 className="h-11 w-auto object-contain"
               />
             </Link>
-            <p className="max-w-sm text-sm leading-relaxed text-slate-600">
+            <p className="max-w-sm text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               Connect with expert tutors, book sessions, and manage your learning
               journey — all in one place.
             </p>
             <div className="flex items-center gap-3">
               <a
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-bold text-[#2f4aa5] shadow-sm transition hover:border-[#2f4aa5] hover:bg-[#2f4aa5] hover:text-white"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-sm font-bold text-[#2f4aa5] shadow-sm transition hover:border-[#2f4aa5] hover:bg-[#2f4aa5] hover:text-white dark:border-[#2a3655] dark:bg-[#151c2f] dark:text-[#8fb0ff] dark:hover:bg-[#2f4aa5] dark:hover:text-white"
                 href="https://www.linkedin.com"
                 target="_blank"
                 rel="noreferrer"
@@ -66,7 +66,7 @@ const Footer = () => {
 
           <div className="grid gap-10 sm:grid-cols-2 lg:col-span-4">
             <div>
-              <h3 className="text-sm font-bold text-[#2f4aa5]">Tutor Services</h3>
+              <h3 className="text-sm font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Tutor Services</h3>
               <ul className="mt-4 space-y-3">
                 {tutorLinks.map((item) => (
                   <li key={item.href}>
@@ -81,7 +81,7 @@ const Footer = () => {
               </ul>
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#2f4aa5]">Account</h3>
+              <h3 className="text-sm font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Account</h3>
               <ul className="mt-4 space-y-3">
                 {accountLinks.map((item) => (
                   <li key={item.href}>
@@ -98,8 +98,8 @@ const Footer = () => {
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-bold text-[#2f4aa5]">Get in touch</h3>
-            <div className="mt-4 space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <h3 className="text-sm font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Get in touch</h3>
+            <div className="mt-4 space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]">
               <a
                 className="block text-sm font-medium text-slate-700 transition hover:text-[#2f4aa5]"
                 href="mailto:info@mediqueue.net"
@@ -136,7 +136,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t border-slate-200 bg-white py-5">
+      <div className="border-t border-slate-200 bg-white py-5 dark:border-[#2a3655] dark:bg-[#0f1729]">
         <p className="text-center text-xs text-slate-500">
           © {year} Mediqueue. All rights reserved.
         </p>

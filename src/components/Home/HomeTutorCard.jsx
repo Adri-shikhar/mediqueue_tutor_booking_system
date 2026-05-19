@@ -10,8 +10,8 @@ export default function HomeTutorCard({ tutor }) {
   const userCanBook = canBook(tutor);
 
   return (
-    <article className="flex h-full flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-b border-slate-100 bg-[#eef7ff] px-4 py-5 text-center">
+    <article className="flex h-full flex-col rounded-xl border border-slate-200 bg-white shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]">
+      <div className="border-b border-slate-100 bg-[#eef7ff] px-4 py-5 text-center dark:border-[#2a3655] dark:bg-[#1a2440]">
         {tutor.photo ? (
           <Image
             src={tutor.photo}

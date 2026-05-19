@@ -12,9 +12,9 @@ export default function MyTutorsTable({ tutors }) {
   }
 
   return (
-    <div className="mt-10 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
-      <table className="w-full min-w-[800px] text-left text-sm">
-        <thead className="border-b bg-slate-50">
+    <div className="mt-10 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm dark:border-[#2a3655] dark:bg-[#151c2f]">
+      <table className="w-full min-w-[800px] text-left text-sm dark:text-slate-200">
+        <thead className="border-b border-slate-200 bg-slate-50 dark:border-[#2a3655] dark:bg-[#1a2440]">
           <tr>
             <th className="px-4 py-3 font-semibold">Tutor Name</th>
             <th className="px-4 py-3 font-semibold">Subject</th>
@@ -30,7 +30,7 @@ export default function MyTutorsTable({ tutors }) {
             const id = toId(tutor._id);
 
             return (
-              <tr key={id} className="border-b hover:bg-slate-50">
+              <tr key={id} className="border-b border-slate-100 hover:bg-slate-50 dark:border-[#2a3655] dark:hover:bg-[#1a2440]">
                 <td className="px-4 py-3 font-medium">{tutor.tutorName}</td>
                 <td className="px-4 py-3">{tutor.subject}</td>
                 <td className="px-4 py-3">{tutor.availability}</td>

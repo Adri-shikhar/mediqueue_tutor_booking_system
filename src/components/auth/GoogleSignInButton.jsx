@@ -18,7 +18,7 @@ export default function GoogleSignInButton({
     <button
       type="button"
       onClick={handleGoogleSignIn}
-      className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2f4aa5]/40 hover:bg-[#eef7ff] hover:text-[#2f4aa5] hover:shadow-md"
+      className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#2f4aa5]/40 hover:bg-[#eef7ff] hover:text-[#2f4aa5] hover:shadow-md dark:border-[#2a3655] dark:bg-[#151c2f] dark:text-slate-200 dark:hover:bg-[#1a2440] dark:hover:text-[#8fb0ff]"
     >
       <FcGoogle className="h-5 w-5" aria-hidden />
       {label}

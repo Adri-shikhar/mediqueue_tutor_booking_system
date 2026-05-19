@@ -54,7 +54,7 @@ export default function RegisterPage() {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">Register</h1>
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5] dark:text-[#8fb0ff]">Register</h1>
 
       <div className="mx-auto mt-10 max-w-md space-y-4">
         <GoogleSignInButton label="Sign up with Google" />
@@ -70,7 +70,7 @@ export default function RegisterPage() {
 
       <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+          <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Full name
           </label>
           <input
@@ -79,12 +79,12 @@ export default function RegisterPage() {
             type="text"
             required
             placeholder="Jane Doe"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+          <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
             Email
           </label>
           <input
@@ -93,14 +93,14 @@ export default function RegisterPage() {
             type="email"
             required
             placeholder="you@example.com"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
         <div>
           <label
             htmlFor="photoURL"
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             Profile photo URL
           </label>
@@ -109,14 +109,14 @@ export default function RegisterPage() {
             name="photoURL"
             type="url"
             placeholder="https://example.com/photo.jpg"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             Password
           </label>
@@ -127,7 +127,7 @@ export default function RegisterPage() {
             required
             onChange={handlePasswordChange}
             placeholder="Min 6 chars, upper & lower case"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
           {passwordErrors.length > 0 ? (
             <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-red-600">
@@ -145,7 +145,7 @@ export default function RegisterPage() {
         <div>
           <label
             htmlFor="confirmPassword"
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-slate-700 dark:text-slate-300"
           >
             Confirm password
           </label>
@@ -155,7 +155,7 @@ export default function RegisterPage() {
             type="password"
             required
             placeholder="Re-enter your password"
-            className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5] dark:border-[#2a3655] dark:bg-[#1a2440] dark:text-slate-100"
           />
         </div>
 
@@ -167,7 +167,7 @@ export default function RegisterPage() {
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
         Already have an account?{" "}
         <Link href="/login" className="font-semibold text-[#2f4aa5] hover:underline">
           Login

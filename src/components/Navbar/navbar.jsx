@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { authClient } from "@/app/lib/auth-client";
 import ProfileDropdown from "@/components/Navbar/ProfileDropdown";
+import ThemeToggle from "@/components/Navbar/ThemeToggle";
+import { mqNavBar } from "@/app/lib/theme";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -23,7 +25,7 @@ const Navbar = () => {
     decodeURIComponent(pathname) === decodeURIComponent(href);
 
   return (
-    <nav className="sticky top-0 z-20 w-full border-b border-slate-200 bg-[#eef7ff]">
+    <nav className={mqNavBar}>
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-3 md:flex-row md:items-center md:gap-6">
         <Link
           href="/"
@@ -38,13 +40,13 @@ const Navbar = () => {
             priority
           />
         </Link>
-        <ul className="flex w-full flex-wrap items-center justify-center gap-5 text-sm font-semibold text-slate-600 md:flex-1 md:justify-center">
+        <ul className="flex w-full flex-wrap items-center justify-center gap-5 text-sm font-semibold text-slate-600 dark:text-slate-300 md:flex-1 md:justify-center">
           {navItems.map((item) => (
             <li key={item.href}>
               <Link
-                className={`relative px-1 transition hover:text-[#2f4aa5] ${
+                className={`relative px-1 transition hover:text-[#2f4aa5] dark:hover:text-blue-300 ${
                   isActive(item.href)
-                    ? "text-[#2f4aa5] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-[#2f4aa5]"
+                    ? "text-[#2f4aa5] after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:w-full after:rounded-full after:bg-[#2f4aa5] dark:text-blue-300 dark:after:bg-blue-300"
                     : ""
                 }`}
                 href={item.href}
@@ -55,14 +57,15 @@ const Navbar = () => {
           ))}
         </ul>
         <div className="flex items-center justify-center gap-3 md:shrink-0 md:justify-end">
+          <ThemeToggle />
           {isPending ? (
-            <span className="h-9 w-24 animate-pulse rounded-full bg-slate-200" />
+            <span className="h-9 w-24 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
           ) : user ? (
             <ProfileDropdown user={user} />
           ) : (
             <>
               <Link
-                className="rounded-full border border-[#2f4aa5] px-4 py-2 text-sm font-semibold text-[#2f4aa5] transition hover:-translate-y-0.5 hover:bg-[#2f4aa5]/10"
+                className="rounded-full border border-[#2f4aa5] px-4 py-2 text-sm font-semibold text-[#2f4aa5] transition hover:-translate-y-0.5 hover:bg-[#2f4aa5]/10 dark:border-[#8fb0ff] dark:text-[#8fb0ff] dark:hover:bg-[#1a2440]"
                 href="/login"
               >
                 Login
