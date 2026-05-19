@@ -1,5 +1,5 @@
 // All API calls go to Express server on port 8000
-const API_URL = "http://localhost:8000";
+const API_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 // GET all tutors (optional search + registration date filter)
 export async function getTutors({ name, registrationStart, registrationEnd } = {}) {
