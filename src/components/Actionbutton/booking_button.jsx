@@ -1,6 +1,7 @@
 "use client";
 import { authClient } from "@/app/lib/auth-client";
 import { createBooking } from "@/app/lib/data";
+import { formatDate, toId } from "@/app/lib/helpers";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
 import {
   Button,
@@ -18,15 +19,6 @@ const readOnlyInputClass =
   "cursor-default bg-slate-50 text-slate-700";
 
 
-function formatDate(dateStr) {
-  if (!dateStr) return "—";
-  return new Date(`${dateStr}T00:00:00`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
 const BookingButton = ({ tutor }) => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
@@ -35,8 +27,7 @@ const BookingButton = ({ tutor }) => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const tutorId =
-    typeof tutor._id === "string" ? tutor._id : tutor._id?.$oid ?? String(tutor._id);
+  const tutorId = toId(tutor._id);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -2,23 +2,10 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/app/lib/auth";
 import { getBookingsByUserId } from "@/app/lib/data";
+import { toId } from "@/app/lib/helpers";
+import BookedSessionCard from "@/components/BookedSessions/BookedSessionCard";
 
 export const dynamic = "force-dynamic";
-
-function formatDate(dateStr) {
-  if (!dateStr) return "—";
-  return new Date(`${dateStr}T00:00:00`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-function toId(id) {
-  if (!id) return "";
-  if (typeof id === "string") return id;
-  return id.$oid ?? String(id);
-}
 
 export default async function MyBookedSessionsPage() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -66,31 +53,18 @@ export default async function MyBookedSessionsPage() {
         </p>
       ) : (
         <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-          {bookings.map((booking) => (
-            <li
-              key={toId(booking._id)}
-              className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <h2 className="text-lg font-bold text-slate-900">
-                {booking.tutorName}
-              </h2>
-              <p className="mt-1 text-sm text-[#2f4aa5]">{booking.subject}</p>
-              <p className="mt-4 text-sm text-slate-600">
-                Session: {formatDate(booking.bookingDate)}
-              </p>
-              <p className="text-sm text-slate-600">
-                ${booking.hourlyFee}/hr · {booking.teachingMode}
-              </p>
-              {booking.tutorId ? (
-                <Link
-                  href={`/Tutors/${toId(booking.tutorId)}`}
-                  className="mt-4 inline-block text-sm font-semibold text-[#2f4aa5] hover:underline"
-                >
-                  View tutor →
-                </Link>
-              ) : null}
-            </li>
-          ))}
+          {bookings.map((booking) => {
+            const bookingId = toId(booking._id);
+            const tutorId = booking.tutorId ? toId(booking.tutorId) : null;
+
+            return (
+              <BookedSessionCard
+                key={bookingId}
+                booking={booking}
+                tutorHref={tutorId ? `/Tutors/${tutorId}` : null}
+              />
+            );
+          })}
         </ul>
       )}
     </main>

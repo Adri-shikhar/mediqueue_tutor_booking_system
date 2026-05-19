@@ -4,16 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTutorById } from "../../lib/data";
+import { formatDate } from "@/app/lib/helpers";
 import BookingButton from "@/components/Actionbutton/booking_button";
-
-function formatDate(dateStr) {
-  if (!dateStr) return "—";
-  return new Date(`${dateStr}T00:00:00`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
+import TutorActions from "@/components/Tutor/TutorActions";
 
 const teachingModeStyles = {
   Online: "bg-sky-100 text-sky-800 ring-sky-200",
@@ -55,7 +48,8 @@ export default async function TutorDetails({ params }) {
       </Link>
 
       <article className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-        <header className="border-b border-slate-100 bg-gradient-to-b from-[#eef7ff] to-white px-6 py-10 sm:px-10">
+        <header className="relative border-b border-slate-100 bg-gradient-to-b from-[#eef7ff] to-white px-6 py-10 sm:px-10">
+          <TutorActions tutor={tutor} tutorId={id} />
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
             <div className="relative shrink-0">
               {tutor.photo ? (
