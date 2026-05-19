@@ -18,3 +18,24 @@ export function formatDate(dateStr) {
     year: "numeric",
   });
 }
+
+/** Show date like "Sunday, May 31, 2026" for tables */
+export function formatLongDate(dateStr) {
+  if (!dateStr) return "—";
+  const date = new Date(dateStr);
+  if (Number.isNaN(date.getTime())) {
+    const fallback = new Date(`${dateStr}T00:00:00`);
+    return fallback.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}

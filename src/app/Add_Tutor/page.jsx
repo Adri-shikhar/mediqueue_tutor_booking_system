@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/app/lib/auth-client";
 import { createTutor } from "@/app/lib/data";
+import { toId } from "@/app/lib/helpers";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
+import { toast } from "react-toastify";
 
 const SUBJECTS = [
   "Mathematics",
@@ -45,7 +47,7 @@ export default function AddTutorPage() {
       return;
     }
     try {
-      await createTutor({
+      const result = await createTutor({
         tutorName: formData.get("tutorName"),
         photo: formData.get("photo"),
         subject: formData.get("subject"),
@@ -61,13 +63,15 @@ export default function AddTutorPage() {
         createdBy_id: user?.id ?? "",
         createdByName: user?.name ?? "",
         createdByEmail: user?.email ?? "",
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       });
-      
 
-      router.push("/Tutors");
+      const newTutorId = toId(result.insertedId);
+      toast.success("Tutor created successfully!");
+      router.push(`/Tutors/${newTutorId}`);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to add tutor. Please try again.");
       setMessage("Failed to add tutor. Please try again.");
     }
   };

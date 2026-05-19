@@ -9,6 +9,15 @@ export const getTutors = async () => {
   return response.json();
 };
 
+/** Get tutors with MongoDB $limit (e.g. 6 for home page) */
+export const getTutorsWithLimit = async (limit = 6) => {
+  const response = await fetch(`${API_URL}/tutors?limit=${limit}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch tutors");
+  }
+  return response.json();
+};
+
 export const getTutorById = async (id) => {
   const response = await fetch(`${API_URL}/tutors/${id}`);
   if (!response.ok) {

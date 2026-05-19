@@ -2,8 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/app/lib/auth";
 import { getBookingsByUserId } from "@/app/lib/data";
-import { toId } from "@/app/lib/helpers";
-import BookedSessionCard from "@/components/BookedSessions/BookedSessionCard";
+import BookedSessionsTable from "@/components/BookedSessions/BookedSessionsTable";
 
 export const dynamic = "force-dynamic";
 
@@ -52,20 +51,7 @@ export default async function MyBookedSessionsPage() {
           </Link>
         </p>
       ) : (
-        <ul className="mt-10 grid gap-4 sm:grid-cols-2">
-          {bookings.map((booking) => {
-            const bookingId = toId(booking._id);
-            const tutorId = booking.tutorId ? toId(booking.tutorId) : null;
-
-            return (
-              <BookedSessionCard
-                key={bookingId}
-                booking={booking}
-                tutorHref={tutorId ? `/Tutors/${tutorId}` : null}
-              />
-            );
-          })}
-        </ul>
+        <BookedSessionsTable bookings={bookings} />
       )}
     </main>
   );

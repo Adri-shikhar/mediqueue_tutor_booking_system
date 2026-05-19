@@ -1,10 +1,10 @@
 "use client";
 
 import { authClient } from "@/app/lib/auth-client";
-import { deleteTutor, updateTutor } from "@/app/lib/data";
+import { updateTutor } from "@/app/lib/data";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
+import DeleteTutorButton from "@/components/Tutor/DeleteTutorButton";
 import {
-  AlertDialog,
   Button,
   Input,
   Label,
@@ -15,6 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
+import { toast } from "react-toastify";
 
 const SUBJECTS = [
   "Mathematics",
@@ -64,7 +65,6 @@ export default function TutorActions({ tutor, tutorId }) {
   );
   const [message, setMessage] = useState("");
   const [isSaving, setIsSaving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   function updateField(name, value) {
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -75,7 +75,7 @@ export default function TutorActions({ tutor, tutorId }) {
     setMessage("");
 
     if (!user?.id) {
-      setMessage("Please log in to edit this tutor.");
+      toast.error("Please log in to edit this tutor.");
       return;
     }
 
@@ -106,32 +106,15 @@ export default function TutorActions({ tutor, tutorId }) {
     setIsSaving(true);
     try {
       await updateTutor(tutorId, data);
-      setMessage("Tutor updated successfully.");
+      toast.success("Tutor updated successfully!");
+      router.push(`/Tutors/${tutorId}`);
       router.refresh();
     } catch (err) {
       console.error(err);
+      toast.error("Failed to update tutor. Please try again.");
       setMessage("Failed to update tutor. Please try again.");
     } finally {
       setIsSaving(false);
-    }
-  }
-
-  async function removeTutor() {
-    if (!user?.id) {
-      setMessage("Please log in to delete this tutor.");
-      return;
-    }
-
-    setIsDeleting(true);
-    try {
-      await deleteTutor(tutorId);
-      router.push("/My_Tutors");
-      router.refresh();
-    } catch (err) {
-      console.error(err);
-      setMessage("Failed to delete tutor. Please try again.");
-    } finally {
-      setIsDeleting(false);
     }
   }
 
@@ -327,43 +310,7 @@ export default function TutorActions({ tutor, tutorId }) {
         </Modal.Backdrop>
       </Modal>
 
-      <AlertDialog>
-        <Button type="button" variant="danger">
-          Delete
-        </Button>
-        <AlertDialog.Backdrop>
-          <AlertDialog.Container>
-            <AlertDialog.Dialog className="sm:max-w-[400px]">
-              <AlertDialog.CloseTrigger />
-              <AlertDialog.Header>
-                <AlertDialog.Icon status="danger" />
-                <AlertDialog.Heading>
-                  Delete tutor permanently?
-                </AlertDialog.Heading>
-              </AlertDialog.Header>
-              <AlertDialog.Body>
-                <p>
-                  This will permanently delete{" "}
-                  <strong>{tutor.tutorName}</strong> and all of their data.
-                  This action cannot be undone.
-                </p>
-              </AlertDialog.Body>
-              <AlertDialog.Footer>
-                <Button slot="close" variant="tertiary">
-                  Cancel
-                </Button>
-                <Button
-                  variant="danger"
-                  isDisabled={isDeleting}
-                  onPress={removeTutor}
-                >
-                  {isDeleting ? "Deleting…" : "Delete tutor"}
-                </Button>
-              </AlertDialog.Footer>
-            </AlertDialog.Dialog>
-          </AlertDialog.Container>
-        </AlertDialog.Backdrop>
-      </AlertDialog>
+      <DeleteTutorButton tutorId={tutorId} tutorName={tutor.tutorName} />
     </div>
   );
 }

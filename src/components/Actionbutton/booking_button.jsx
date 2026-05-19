@@ -12,7 +12,9 @@ import {
   TextField,
 } from "@heroui/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 
 const readOnlyInputClass =
@@ -20,6 +22,7 @@ const readOnlyInputClass =
 
 
 const BookingButton = ({ tutor }) => {
+  const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
@@ -60,12 +63,15 @@ const BookingButton = ({ tutor }) => {
         user_id: user.id,
         userEmail: user.email ?? "",
         userName: user.name ?? "",
+        phone: user.phone ?? "",
+        status: "Confirmed",
         createdAt: new Date().toISOString(),
       });
-      setMessage("Session booked successfully.");
-      setBookingDate("");
+      toast.success("Session booked successfully!");
+      router.push("/My_Booked_Sessions");
     } catch (error) {
       console.error(error);
+      toast.error("Failed to book session. Please try again.");
       setMessage("Failed to book session. Please try again.");
     } finally {
       setIsSubmitting(false);

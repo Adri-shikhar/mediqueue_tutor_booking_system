@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { getTutors } from "../lib/data";
+import { toId } from "@/app/lib/helpers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -44,13 +45,14 @@ const Tutors = async () => {
       ) : (
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tutors.map((tutor) => {
+            const tutorId = toId(tutor._id);
             const modeClass =
               teachingModeStyles[tutor.teachingMode] ??
               "bg-slate-100 text-slate-700 ring-slate-200";
 
             return (
               <article
-                key={String(tutor._id)}
+                key={tutorId}
                 className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
               >
                 <div className="border-b border-slate-100 bg-gradient-to-b from-[#eef7ff] to-white px-5 pb-4 pt-6">
@@ -114,7 +116,7 @@ const Tutors = async () => {
                   </dl>
 
                   <Link
-                    href={`/Tutors/${tutor._id}`}
+                    href={`/Tutors/${tutorId}`}
                     className="mt-5 w-full rounded-full bg-[#2f4aa5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#263f8b]"
                   >
                     Book session
