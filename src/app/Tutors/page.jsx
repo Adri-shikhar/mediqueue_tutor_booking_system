@@ -2,6 +2,8 @@ export const dynamic = "force-dynamic";
 
 import { getTutors } from "../lib/data";
 import { toId } from "@/app/lib/helpers";
+import { canBook } from "@/app/lib/slots";
+import SlotBadge from "@/components/Tutor/SlotBadge";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -107,20 +109,26 @@ const Tutors = async () => {
                       label="Sessions"
                       value={`${formatDate(tutor.sessionStartDate)} – ${formatDate(tutor.sessionEndDate)}`}
                     />
-                    <DetailItem
-                      label="Slots left"
-                      value={
-                        tutor.totalSlot != null ? String(tutor.totalSlot) : null
-                      }
-                    />
+                    <div className="text-sm">
+                      <dt className="font-medium text-slate-500">Slots left</dt>
+                      <dd className="mt-0.5">
+                        <SlotBadge count={tutor.totalSlot} />
+                      </dd>
+                    </div>
                   </dl>
 
-                  <Link
-                    href={`/Tutors/${tutorId}`}
-                    className="mt-5 w-full rounded-full bg-[#2f4aa5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#263f8b]"
-                  >
-                    Book session
-                  </Link>
+                  {canBook(tutor) ? (
+                    <Link
+                      href={`/Tutors/${tutorId}`}
+                      className="mt-5 w-full rounded-full bg-[#2f4aa5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#263f8b]"
+                    >
+                      Book session
+                    </Link>
+                  ) : (
+                    <span className="mt-5 block w-full cursor-not-allowed rounded-full bg-slate-300 px-4 py-2.5 text-center text-sm font-semibold text-slate-600">
+                      Fully booked
+                    </span>
+                  )}
                 </div>
               </article>
             );

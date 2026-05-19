@@ -1,124 +1,95 @@
-// All API calls go to the Express server on port 8000
+// All API calls go to Express server on port 8000
 const API_URL = "http://localhost:8000";
 
-export const getTutors = async () => {
+// GET all tutors
+export async function getTutors() {
   const response = await fetch(`${API_URL}/tutors`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tutors");
-  }
+  if (!response.ok) throw new Error("Failed to fetch tutors");
   return response.json();
-};
+}
 
-/** Get tutors with MongoDB $limit (e.g. 6 for home page) */
-export const getTutorsWithLimit = async (limit = 6) => {
+// GET tutors with limit (home page uses limit=6)
+export async function getTutorsWithLimit(limit) {
   const response = await fetch(`${API_URL}/tutors?limit=${limit}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tutors");
-  }
+  if (!response.ok) throw new Error("Failed to fetch tutors");
   return response.json();
-};
+}
 
-export const getTutorById = async (id) => {
+// GET one tutor by id
+export async function getTutorById(id) {
   const response = await fetch(`${API_URL}/tutors/${id}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch tutor");
-  }
+  if (!response.ok) throw new Error("Failed to fetch tutor");
   return response.json();
-};
+}
 
-export const createTutor = async (tutor) => {
+// POST new tutor
+export async function createTutor(tutor) {
   const response = await fetch(`${API_URL}/tutors`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(tutor),
   });
-  if (!response.ok) {
-    throw new Error("Failed to create tutor");
-  }
+  if (!response.ok) throw new Error("Failed to create tutor");
   return response.json();
-};
+}
 
-export const updateTutor = async (id, tutor) => {
+// PUT update tutor
+export async function updateTutor(id, tutor) {
   const response = await fetch(`${API_URL}/tutors/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(tutor),
   });
-  if (!response.ok) {
-    throw new Error("Failed to update tutor");
-  }
+  if (!response.ok) throw new Error("Failed to update tutor");
   return response.json();
-};
+}
 
-export const deleteTutor = async (id) => {
-  const response = await fetch(`${API_URL}/tutors/${id}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete tutor");
-  }
+// DELETE tutor
+export async function deleteTutor(id) {
+  const response = await fetch(`${API_URL}/tutors/${id}`, { method: "DELETE" });
+  if (!response.ok) throw new Error("Failed to delete tutor");
   const text = await response.text();
-  if (!text) {
-    return { ok: true };
-  }
+  if (!text) return { ok: true };
   return JSON.parse(text);
-};
+}
 
-export const createBooking = async (booking) => {
+// GET tutors made by one user
+export async function getTutorsByCreatorId(userId) {
+  const url = `${API_URL}/tutors?createdBy_id=${encodeURIComponent(userId)}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch your tutors");
+  return response.json();
+}
+
+// POST new booking (server also decreases tutor slot)
+export async function createBooking(booking) {
   const response = await fetch(`${API_URL}/bookings`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(booking),
   });
   if (!response.ok) {
-    throw new Error("Failed to create booking");
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.message || "Failed to create booking");
   }
   return response.json();
-};
+}
 
-export const getBookingsByUserId = async (userId) => {
-  const response = await fetch(
-    `${API_URL}/bookings?user_id=${encodeURIComponent(userId)}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch bookings");
-  }
+// GET bookings for one user
+export async function getBookingsByUserId(userId) {
+  const url = `${API_URL}/bookings?user_id=${encodeURIComponent(userId)}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Failed to fetch bookings");
   return response.json();
-};
+}
 
-export const updateBooking = async (id, booking) => {
+// PUT update booking (e.g. cancel)
+export async function updateBooking(id, booking) {
   const response = await fetch(`${API_URL}/bookings/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(booking),
   });
-  if (!response.ok) {
-    throw new Error("Failed to update booking");
-  }
+  if (!response.ok) throw new Error("Failed to update booking");
   return response.json();
-};
-
-export const deleteBooking = async (id) => {
-  const response = await fetch(`${API_URL}/bookings/${id}`, {
-    method: "DELETE",
-  });
-  if (!response.ok) {
-    throw new Error("Failed to delete booking");
-  }
-  // Server may send JSON or an empty body — both are OK
-  const text = await response.text();
-  if (!text) {
-    return { ok: true };
-  }
-  return JSON.parse(text);
-};
-
-export const getTutorsByCreatorId = async (userId) => {
-  const response = await fetch(
-    `${API_URL}/tutors?createdBy_id=${encodeURIComponent(userId)}`
-  );
-  if (!response.ok) {
-    throw new Error("Failed to fetch your tutors");
-  }
-  return response.json();
-};
+}

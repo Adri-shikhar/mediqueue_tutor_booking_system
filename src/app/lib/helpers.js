@@ -1,6 +1,6 @@
-// Small helper functions used in many pages
+// Simple helper functions used in many pages
 
-/** Turn MongoDB id into a plain string */
+// MongoDB id can be an object — this turns it into a normal string
 export function toId(id) {
   if (!id) return "";
   if (typeof id === "string") return id;
@@ -8,10 +8,10 @@ export function toId(id) {
   return String(id);
 }
 
-/** Show date like "May 19, 2026" */
+// Short date: May 19, 2026
 export function formatDate(dateStr) {
   if (!dateStr) return "—";
-  const date = new Date(`${dateStr}T00:00:00`);
+  const date = new Date(dateStr + "T00:00:00");
   return date.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
@@ -19,18 +19,12 @@ export function formatDate(dateStr) {
   });
 }
 
-/** Show date like "Sunday, May 31, 2026" for tables */
+// Long date for tables: Sunday, May 31, 2026
 export function formatLongDate(dateStr) {
   if (!dateStr) return "—";
-  const date = new Date(dateStr);
-  if (Number.isNaN(date.getTime())) {
-    const fallback = new Date(`${dateStr}T00:00:00`);
-    return fallback.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) {
+    date = new Date(dateStr + "T00:00:00");
   }
   return date.toLocaleDateString("en-US", {
     weekday: "long",

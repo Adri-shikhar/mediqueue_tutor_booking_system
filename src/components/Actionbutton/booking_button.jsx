@@ -1,56 +1,58 @@
 "use client";
+
 import { authClient } from "@/app/lib/auth-client";
 import { createBooking } from "@/app/lib/data";
 import { formatDate, toId } from "@/app/lib/helpers";
+import { canBook, getSlots, isFullyBooked } from "@/app/lib/slots";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
-import {
-  Button,
-  Input,
-  Label,
-  Modal,
-  Surface,
-  TextField,
-} from "@heroui/react";
+import SlotBadge from "@/components/Tutor/SlotBadge";
+import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 
-const readOnlyInputClass =
-  "cursor-default bg-slate-50 text-slate-700";
-
-
-const BookingButton = ({ tutor }) => {
+export default function BookingButton({ tutor }) {
   const router = useRouter();
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
   const [bookingDate, setBookingDate] = useState("");
   const [message, setMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const tutorId = toId(tutor._id);
+  const slotsLeft = getSlots(tutor);
+  const tutorIsFull = isFullyBooked(tutor);
+  const userCanBook = canBook(tutor);
 
-  const handleSubmit = async (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
     setMessage("");
 
-    if (!user?.id) {
-      setMessage("Please log in to book a session.");
+    // --- SLOT CHECK (frontend) ---
+    if (!userCanBook) {
+      toast.error("No slots left.");
+      return;
+    }
+
+    if (!user) {
+      setMessage("Please log in first.");
       return;
     }
 
     if (!bookingDate) {
-      setMessage("Please select a session date.");
+      setMessage("Please pick a session date.");
       return;
     }
 
+    setLoading(true);
 
-    setIsSubmitting(true);
     try {
+      // Server will also check slots and do totalSlot - 1
       await createBooking({
-        tutorId,
+        tutorId: tutorId,
         tutorName: tutor.tutorName,
         subject: tutor.subject,
         hourlyFee: tutor.hourlyFee,
@@ -59,176 +61,133 @@ const BookingButton = ({ tutor }) => {
         availability: tutor.availability,
         sessionStartDate: tutor.sessionStartDate,
         sessionEndDate: tutor.sessionEndDate,
-        bookingDate,
+        bookingDate: bookingDate,
         user_id: user.id,
-        userEmail: user.email ?? "",
-        userName: user.name ?? "",
-        phone: user.phone ?? "",
+        userEmail: user.email || "",
+        userName: user.name || "",
+        phone: user.phone || "",
         status: "Confirmed",
         createdAt: new Date().toISOString(),
       });
-      toast.success("Session booked successfully!");
+
+      toast.success("Session booked! 1 slot used.");
+      router.refresh();
       router.push("/My_Booked_Sessions");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to book session. Please try again.");
-      setMessage("Failed to book session. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
+      if (error.message === "No slots available") {
+        toast.error("No slots left. Tutor is fully booked.");
+        setMessage("No slots left.");
+      } else {
+        toast.error("Booking failed.");
+        setMessage("Booking failed.");
+      }
+
+      router.refresh();
+    }
+
+    setLoading(false);
+  }
+
+  // --- UI when slots = 0 (red badge, no booking) ---
+  if (tutorIsFull) {
+    return (
+      <div className="mt-8">
+        <p className="mb-2 text-sm text-slate-700">
+          Slots left: <SlotBadge count={slotsLeft} />
+        </p>
+        <button
+          type="button"
+          disabled
+          className="rounded-full bg-slate-300 px-6 py-2.5 text-sm font-semibold text-slate-600"
+        >
+          Fully Booked
+        </button>
+      </div>
+    );
+  }
+
+  // --- UI when slots > 0 (green badge, can book) ---
   return (
-    <Modal>
-      <Button
-        type="button"
-        className="mt-8 rounded-full bg-[#2f4aa5] px-6 py-2.5 text-sm font-semibold text-white hover:bg-[#263f8b]"
-      >
-        Book Session
-      </Button>
-      <Modal.Backdrop>
-        <Modal.Container placement="auto">
-          <Modal.Dialog className="sm:max-w-md">
-            <Modal.CloseTrigger />
-            <Modal.Header>
-              <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
-                <HiOutlineCalendarDays className="size-5" />
-              </Modal.Icon>
-              <Modal.Heading>Book session</Modal.Heading>
-              <p className="mt-1.5 text-sm leading-5 text-muted">
-                Tutor details are pre-filled. Pick your session date below.
-              </p>
-            </Modal.Header>
-            <Modal.Body className="p-6">
-              <Surface variant="default">
-                {!user?.id ? (
-                  <p className="text-sm text-slate-600">
-                    You need to{" "}
-                    <Link
-                      href="/login"
-                      className="font-medium text-[#2f4aa5] hover:underline"
-                    >
-                      log in
+    <div className="mt-8">
+      <p className="mb-3 text-sm text-slate-700">
+        Slots left: <SlotBadge count={slotsLeft} />
+      </p>
+
+      <Modal>
+        <Button className="rounded-full bg-[#2f4aa5] px-6 py-2.5 text-sm font-semibold text-white">
+          Book Session
+        </Button>
+
+        <Modal.Backdrop>
+          <Modal.Container placement="auto">
+            <Modal.Dialog className="sm:max-w-md">
+              <Modal.CloseTrigger />
+              <Modal.Header>
+                <Modal.Icon className="bg-accent-soft text-accent-soft-foreground">
+                  <HiOutlineCalendarDays className="size-5" />
+                </Modal.Icon>
+                <Modal.Heading>Book session</Modal.Heading>
+              </Modal.Header>
+
+              <Modal.Body className="p-6">
+                {!user ? (
+                  <p className="text-sm">
+                    <Link href="/login" className="text-[#2f4aa5] underline">
+                      Log in
                     </Link>{" "}
-                    before booking.
+                    to book.
                   </p>
                 ) : (
-                  <form
-                    id="booking-form"
-                    className="flex flex-col gap-4"
-                    onSubmit={handleSubmit}
-                  >
-                    <TextField className="w-full" name="tutorName">
+                  <form id="booking-form" className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                    <p className="text-sm">
+                      Slots left: <SlotBadge count={slotsLeft} />
+                    </p>
+
+                    <TextField>
                       <Label>Tutor</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={tutor.tutorName ?? ""}
-                      />
+                      <Input readOnly value={tutor.tutorName || ""} />
                     </TextField>
-                    <TextField className="w-full" name="subject">
+
+                    <TextField>
                       <Label>Subject</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={tutor.subject ?? ""}
-                      />
+                      <Input readOnly value={tutor.subject || ""} />
                     </TextField>
-                    <TextField className="w-full" name="hourlyFee">
-                      <Label>Hourly fee</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={
-                          tutor.hourlyFee != null ? `$${tutor.hourlyFee}` : ""
-                        }
-                      />
-                    </TextField>
-                    <TextField className="w-full" name="teachingMode">
-                      <Label>Teaching mode</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={tutor.teachingMode ?? ""}
-                      />
-                    </TextField>
-                    <TextField className="w-full" name="location">
-                      <Label>Location</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={tutor.location ?? ""}
-                      />
-                    </TextField>
-                    <TextField className="w-full" name="availability">
-                      <Label>Availability</Label>
-                      <Input
-                        readOnly
-                        className={readOnlyInputClass}
-                        value={tutor.availability ?? ""}
-                      />
-                    </TextField>
-                    <div className="text-sm">
-                      <p className="font-medium text-slate-700">
-                        Tutor session window
-                      </p>
-                      <p className="mt-1 text-slate-600">
-                        {formatDate(tutor.sessionStartDate)} –{" "}
-                        {formatDate(tutor.sessionEndDate)}
-                      </p>
-                    </div>
-                    <div className="w-full">
-                      <Label className="mb-1 block text-sm font-medium text-slate-700">
-                        Your session date
-                      </Label>
+
+                    <div>
+                      <Label>Session date</Label>
                       <SessionDatePicker
-                        placeholderText="Select session date"
                         onDateChange={setBookingDate}
                         minDate={tutor.sessionStartDate}
                         maxDate={tutor.sessionEndDate}
+                        placeholderText="Pick a date"
                       />
                     </div>
-                    {message ? (
-                      <p
-                        className={`text-sm ${
-                          message.includes("success")
-                            ? "text-emerald-700"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {message}
-                      </p>
-                    ) : null}
+
+                    <p className="text-sm text-slate-600">
+                      {formatDate(tutor.sessionStartDate)} – {formatDate(tutor.sessionEndDate)}
+                    </p>
+
+                    {message && <p className="text-sm text-red-600">{message}</p>}
                   </form>
                 )}
-              </Surface>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button slot="close" variant="secondary" type="button">
-                Cancel
-              </Button>
-              {user?.id ? (
-                <Button
-                  type="submit"
-                  form="booking-form"
-                  isDisabled={isSubmitting}
-                >
-                  {isSubmitting ? "Booking…" : "Confirm booking"}
-                </Button>
-              ) : (
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center rounded-lg bg-[#2f4aa5] px-4 py-2 text-sm font-semibold text-white hover:bg-[#263f8b]"
-                >
-                  Log in
-                </Link>
-              )}
-            </Modal.Footer>
-          </Modal.Dialog>
-        </Modal.Container>
-      </Modal.Backdrop>
-    </Modal>
-  );
-};
+              </Modal.Body>
 
-export default BookingButton;
+              <Modal.Footer>
+                <Button slot="close" variant="secondary">
+                  Cancel
+                </Button>
+                {user && (
+                  <Button type="submit" form="booking-form" isDisabled={loading}>
+                    {loading ? "Booking..." : "Confirm booking"}
+                  </Button>
+                )}
+              </Modal.Footer>
+            </Modal.Dialog>
+          </Modal.Container>
+        </Modal.Backdrop>
+      </Modal>
+    </div>
+  );
+}

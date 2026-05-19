@@ -7,41 +7,29 @@ import { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
 
-function StatusBadge({ status }) {
-  const normalized = (status || "Confirmed").toLowerCase();
-  if (normalized === "cancelled") {
-    return (
-      <span className="inline-block rounded-md bg-red-100 px-2.5 py-1 text-xs font-semibold capitalize text-red-700">
-        cancelled
-      </span>
-    );
-  }
-  return (
-    <span className="inline-block rounded-md bg-emerald-100 px-2.5 py-1 text-xs font-semibold capitalize text-emerald-800">
-      Confirmed
-    </span>
-  );
-}
-
 export default function BookedSessionsTable({ bookings }) {
   const router = useRouter();
-  const [cancellingId, setCancellingId] = useState("");
+  const [busyId, setBusyId] = useState("");
 
-  async function cancelBooking(booking) {
-    const bookingId = toId(booking._id);
-    setCancellingId(bookingId);
+  async function cancelSession(booking) {
+    const id = toId(booking._id);
+    setBusyId(id);
+
     try {
-      const data = { ...booking };
-      delete data._id;
-      await updateBooking(bookingId, { ...data, status: "cancelled" });
-      toast.success("Session cancelled.");
+      const updated = { ...booking };
+      delete updated._id;
+      updated.status = "cancelled";
+
+      // Server will do totalSlot + 1 when status is cancelled
+      await updateBooking(id, updated);
+      toast.success("Cancelled. 1 slot returned to tutor.");
       router.refresh();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to cancel session.");
-    } finally {
-      setCancellingId("");
+    } catch (error) {
+      console.error(error);
+      toast.error("Could not cancel session.");
     }
+
+    setBusyId("");
   }
 
   if (bookings.length === 0) {
@@ -51,47 +39,45 @@ export default function BookedSessionsTable({ bookings }) {
   return (
     <div className="mt-10 overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
       <table className="w-full min-w-[900px] text-left text-sm">
-        <thead className="border-b border-slate-200 bg-slate-50">
+        <thead className="border-b bg-slate-50">
           <tr>
-            <th className="px-4 py-3 font-semibold text-slate-700">Name</th>
-            <th className="px-4 py-3 font-semibold text-slate-700">Phone</th>
-            <th className="px-4 py-3 font-semibold text-slate-700">Tutor Name</th>
-            <th className="px-4 py-3 font-semibold text-slate-700">Email</th>
-            <th className="px-4 py-3 font-semibold text-slate-700">Status</th>
-            <th className="px-4 py-3 text-center font-semibold text-slate-700">
-              Cancel
-            </th>
+            <th className="px-4 py-3 font-semibold">Name</th>
+            <th className="px-4 py-3 font-semibold">Phone</th>
+            <th className="px-4 py-3 font-semibold">Tutor Name</th>
+            <th className="px-4 py-3 font-semibold">Email</th>
+            <th className="px-4 py-3 font-semibold">Status</th>
+            <th className="px-4 py-3 text-center font-semibold">Cancel</th>
           </tr>
         </thead>
         <tbody>
           {bookings.map((booking) => {
-            const bookingId = toId(booking._id);
-            const isCancelled =
-              (booking.status || "Confirmed").toLowerCase() === "cancelled";
+            const id = toId(booking._id);
+            const status = booking.status || "Confirmed";
+            const isCancelled = status.toLowerCase() === "cancelled";
 
             return (
-              <tr
-                key={bookingId}
-                className="border-b border-slate-100 last:border-0 hover:bg-slate-50/50"
-              >
-                <td className="px-4 py-3 font-medium text-slate-900">
-                  {booking.subject}
-                </td>
-                <td className="px-4 py-3 text-slate-700">
-                  {booking.phone || "—"}
-                </td>
-                <td className="px-4 py-3 text-slate-700">{booking.tutorName}</td>
-                <td className="px-4 py-3 text-slate-700">{booking.userEmail}</td>
+              <tr key={id} className="border-b hover:bg-slate-50">
+                <td className="px-4 py-3 font-medium">{booking.subject}</td>
+                <td className="px-4 py-3">{booking.phone || "—"}</td>
+                <td className="px-4 py-3">{booking.tutorName}</td>
+                <td className="px-4 py-3">{booking.userEmail}</td>
                 <td className="px-4 py-3">
-                  <StatusBadge status={booking.status} />
+                  {isCancelled ? (
+                    <span className="rounded-md bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">
+                      cancelled
+                    </span>
+                  ) : (
+                    <span className="rounded-md bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-800">
+                      Confirmed
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-3 text-center">
                   <button
                     type="button"
-                    disabled={isCancelled || cancellingId === bookingId}
-                    onClick={() => cancelBooking(booking)}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
-                    title="Cancel session"
+                    disabled={isCancelled || busyId === id}
+                    onClick={() => cancelSession(booking)}
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 disabled:opacity-40"
                   >
                     <FiX className="size-5" />
                   </button>

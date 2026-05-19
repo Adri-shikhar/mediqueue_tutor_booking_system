@@ -4,24 +4,19 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const CalendarIcon = ({
+export default function SessionDatePicker({
   onDateChange,
   placeholderText,
   minDate,
   maxDate,
   initialDate,
-}) => {
-  const parseInitial = (dateStr) =>
-    dateStr ? new Date(`${dateStr}T00:00:00`) : null;
+}) {
+  const [selectedDate, setSelectedDate] = useState(() => {
+    if (!initialDate) return null;
+    return new Date(initialDate + "T00:00:00");
+  });
 
-  const [selectedDate, setSelectedDate] = useState(() =>
-    parseInitial(initialDate)
-  );
-
-  const parseBound = (dateStr) =>
-    dateStr ? new Date(`${dateStr}T00:00:00`) : undefined;
-
-  const handleChange = (date) => {
+  function handleChange(date) {
     setSelectedDate(date);
 
     if (!date) {
@@ -32,38 +27,25 @@ const CalendarIcon = ({
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-    onDateChange(`${year}-${month}-${day}`);
-  };
+    const dateString = year + "-" + month + "-" + day;
+
+    onDateChange(dateString);
+  }
+
+  let min = undefined;
+  let max = undefined;
+  if (minDate) min = new Date(minDate + "T00:00:00");
+  if (maxDate) max = new Date(maxDate + "T00:00:00");
 
   return (
     <DatePicker
-      showIcon
       selected={selectedDate}
       onChange={handleChange}
-      minDate={parseBound(minDate)}
-      maxDate={parseBound(maxDate)}
-      placeholderText={placeholderText}
+      minDate={min}
+      maxDate={max}
+      placeholderText={placeholderText || "Select date"}
       dateFormat="MMM d, yyyy"
-      className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
-      toggleCalendarOnIconClick
-    />
-  );
-};
-
-export default function SessionDatePicker({
-  onDateChange,
-  placeholderText,
-  minDate,
-  maxDate,
-  initialDate,
-}) {
-  return (
-    <CalendarIcon
-      onDateChange={onDateChange}
-      placeholderText={placeholderText}
-      minDate={minDate}
-      maxDate={maxDate}
-      initialDate={initialDate}
+      className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
     />
   );
 }

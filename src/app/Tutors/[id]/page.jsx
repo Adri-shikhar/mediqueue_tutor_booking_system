@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { getTutorById } from "../../lib/data";
 import { formatDate } from "@/app/lib/helpers";
 import BookingButton from "@/components/Actionbutton/booking_button";
+import SlotBadge from "@/components/Tutor/SlotBadge";
 import TutorActions from "@/components/Tutor/TutorActions";
 
 const teachingModeStyles = {
@@ -102,12 +103,12 @@ export default async function TutorDetails({ params }) {
               label="Sessions"
               value={`${formatDate(tutor.sessionStartDate)} – ${formatDate(tutor.sessionEndDate)}`}
             />
-            <DetailItem
-              label="Slots left"
-              value={
-                tutor.totalSlot != null ? String(tutor.totalSlot) : null
-              }
-            />
+            <div className="text-sm">
+              <dt className="font-medium text-slate-500">Slots left</dt>
+              <dd className="mt-0.5">
+                <SlotBadge count={tutor.totalSlot} />
+              </dd>
+            </div>
           </dl>
 
         <BookingButton tutor={tutor} />

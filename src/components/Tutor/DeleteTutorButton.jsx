@@ -7,36 +7,31 @@ import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 
-/** Red delete button with confirm dialog */
-export default function DeleteTutorButton({
-  tutorId,
-  tutorName,
-  redirectTo = "/My_Tutors",
-  iconOnly = false,
-}) {
+export default function DeleteTutorButton({ tutorId, tutorName, iconOnly }) {
   const router = useRouter();
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   async function handleDelete() {
-    setIsDeleting(true);
+    setLoading(true);
+
     try {
       await deleteTutor(tutorId);
-      toast.success("Tutor deleted successfully!");
-      router.push(redirectTo);
+      toast.success("Tutor deleted!");
+      router.push("/My_Tutors");
       router.refresh();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to delete tutor. Please try again.");
-    } finally {
-      setIsDeleting(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Delete failed.");
     }
+
+    setLoading(false);
   }
 
-  const trigger = iconOnly ? (
+  const triggerButton = iconOnly ? (
     <button
       type="button"
-      className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 transition hover:bg-red-100"
-      title="Delete tutor"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
+      title="Delete"
     >
       <FiTrash2 className="size-4" />
     </button>
@@ -48,31 +43,26 @@ export default function DeleteTutorButton({
 
   return (
     <AlertDialog>
-      {trigger}
+      {triggerButton}
       <AlertDialog.Backdrop>
         <AlertDialog.Container>
           <AlertDialog.Dialog className="sm:max-w-[400px]">
             <AlertDialog.CloseTrigger />
             <AlertDialog.Header>
               <AlertDialog.Icon status="danger" />
-              <AlertDialog.Heading>Delete tutor permanently?</AlertDialog.Heading>
+              <AlertDialog.Heading>Delete tutor?</AlertDialog.Heading>
             </AlertDialog.Header>
             <AlertDialog.Body>
               <p>
-                This will permanently delete <strong>{tutorName}</strong> and all
-                of their data. This action cannot be undone.
+                Delete <strong>{tutorName}</strong>? This cannot be undone.
               </p>
             </AlertDialog.Body>
             <AlertDialog.Footer>
               <Button slot="close" variant="tertiary">
                 Cancel
               </Button>
-              <Button
-                variant="danger"
-                isDisabled={isDeleting}
-                onPress={handleDelete}
-              >
-                {isDeleting ? "Deleting…" : "Delete tutor"}
+              <Button variant="danger" isDisabled={loading} onPress={handleDelete}>
+                {loading ? "Deleting..." : "Delete"}
               </Button>
             </AlertDialog.Footer>
           </AlertDialog.Dialog>
