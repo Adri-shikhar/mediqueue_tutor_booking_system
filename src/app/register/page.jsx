@@ -1,29 +1,60 @@
 "use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
 import { authClient } from "@/app/lib/auth-client";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+import { getPasswordErrors } from "@/app/lib/passwordValidation";
+
 export default function RegisterPage() {
+  const router = useRouter();
+  const [passwordErrors, setPasswordErrors] = useState([]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formDataObject = Object.fromEntries(formData);
-    console.log(formDataObject);
-    const {data,error}=await authClient.signUp.email({
-        email: formDataObject.email,
-        password: formDataObject.password,
-        name: formDataObject.name,
-        image: formDataObject.photoURL || undefined,
-    });
-    if (error) {
-        console.error(error);
+
+    const errors = getPasswordErrors(formDataObject.password);
+    if (formDataObject.password !== formDataObject.confirmPassword) {
+      errors.push("Passwords do not match.");
     }
+
+    if (errors.length > 0) {
+      setPasswordErrors(errors);
+      toast.error("Please fix the password errors below.");
+      return;
+    }
+
+    setPasswordErrors([]);
+
+    const { data, error } = await authClient.signUp.email({
+      email: formDataObject.email,
+      password: formDataObject.password,
+      name: formDataObject.name,
+      image: formDataObject.photoURL || undefined,
+    });
+
+    if (error) {
+      toast.error(error.message || "Registration failed. Try again.");
+      return;
+    }
+
     if (data) {
-        console.log(data);
+      toast.success("Account created! Please log in.");
+      router.push("/login");
     }
   };
+
+  const handlePasswordChange = (e) => {
+    setPasswordErrors(getPasswordErrors(e.target.value));
+  };
+
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-3xl font-bold text-center text-[#2f4aa5]">Register</h1>
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">Register</h1>
 
       <div className="mx-auto mt-10 max-w-md space-y-4">
         <GoogleSignInButton label="Sign up with Google" />
@@ -94,10 +125,21 @@ export default function RegisterPage() {
             name="password"
             type="password"
             required
-            minLength={8}
-            placeholder="At least 8 characters"
+            onChange={handlePasswordChange}
+            placeholder="Min 6 chars, upper & lower case"
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
           />
+          {passwordErrors.length > 0 ? (
+            <ul className="mt-2 list-inside list-disc space-y-1 text-sm text-red-600">
+              {passwordErrors.map((msg) => (
+                <li key={msg}>{msg}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-1 text-xs text-slate-500">
+              Must be 6+ characters with uppercase and lowercase letters.
+            </p>
+          )}
         </div>
 
         <div>
@@ -112,7 +154,6 @@ export default function RegisterPage() {
             name="confirmPassword"
             type="password"
             required
-            minLength={8}
             placeholder="Re-enter your password"
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
           />

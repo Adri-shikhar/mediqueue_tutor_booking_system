@@ -2,35 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { authClient } from "@/app/lib/auth-client";
+import ProfileDropdown from "@/components/Navbar/ProfileDropdown";
+
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/Tutors", label: "Tutors" },
+  { href: "/Add_Tutor", label: "Add Tutor" },
+  { href: "/My_Tutors", label: "My Tutors" },
+  { href: "/My_Booked_Sessions", label: "My Booked Sessions" },
+];
 
 const Navbar = () => {
   const pathname = usePathname();
-  const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
   const user = session?.user;
 
-  const navItems = [
-    { href: "/", label: "Home" },
-    { href: "/Tutors", label: "Tutors" },
-    { href: "/Add_Tutor", label: "Add Tutor" },
-    { href: "/My_Tutors", label: "My Tutors" },
-    { href: "/My_Booked_Sessions", label: "My Booked Sessions" },
-  ];
-
   const isActive = (href) =>
     decodeURIComponent(pathname) === decodeURIComponent(href);
-
-  const profileImage = user?.image || user?.photoURL;
-  const displayName = user?.name || user?.email || "User";
-  const initials = displayName.charAt(0).toUpperCase();
-
-  const handleLogout = async () => {
-    await authClient.signOut();
-    router.push("/");
-    router.refresh();
-  };
 
   return (
     <nav className="sticky top-0 z-20 w-full border-b border-slate-200 bg-[#eef7ff]">
@@ -65,36 +55,10 @@ const Navbar = () => {
           ))}
         </ul>
         <div className="flex items-center justify-center gap-3 md:shrink-0 md:justify-end">
-          {isPending ? null : user ? (
-            <>
-              <div className="flex items-center gap-2">
-                {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt={displayName}
-                    className="h-9 w-9 rounded-full border-2 border-[#2f4aa5] object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <span
-                    className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-[#2f4aa5] bg-[#2f4aa5] text-sm font-semibold text-white"
-                    aria-hidden
-                  >
-                    {initials}
-                  </span>
-                )}
-                <span className="max-w-[120px] truncate text-sm font-medium text-slate-700 sm:max-w-[160px]">
-                  {displayName}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="rounded-full border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:border-red-700 hover:bg-red-700 hover:shadow-md active:translate-y-0"
-              >
-                Log out
-              </button>
-            </>
+          {isPending ? (
+            <span className="h-9 w-24 animate-pulse rounded-full bg-slate-200" />
+          ) : user ? (
+            <ProfileDropdown user={user} />
           ) : (
             <>
               <Link

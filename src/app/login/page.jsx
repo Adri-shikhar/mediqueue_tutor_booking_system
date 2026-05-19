@@ -1,33 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 import { authClient } from "@/app/lib/auth-client";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
+function safeCallbackUrl(raw) {
+  if (!raw || typeof raw !== "string") return "/";
+  if (!raw.startsWith("/") || raw.startsWith("//")) return "/";
+  return raw;
+}
+
 export default function LoginPage() {
   const router = useRouter();
-  const { data: session, error: sessionError } = authClient.useSession();
+  const searchParams = useSearchParams();
+  const callbackUrl = safeCallbackUrl(searchParams.get("callbackUrl"));
+  const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  if (sessionError) {
-    console.error(sessionError);
-  }
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    toast.info(
+      "Password reset is not available during review. Contact your instructor if needed."
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formDataObject = Object.fromEntries(formData);
+
     const { data, error } = await authClient.signIn.email({
       email: formDataObject.email,
       password: formDataObject.password,
     });
+
     if (error) {
-      console.error(error);
+      toast.error(error.message || "Login failed. Check your email and password.");
       return;
     }
+
     if (data) {
-      router.push("/My_Booked_Sessions");
+      toast.success("Welcome back!");
+      router.push(callbackUrl);
+      router.refresh();
     }
   };
 
@@ -44,18 +61,11 @@ export default function LoginPage() {
           >
             Go to my booked sessions
           </Link>
-          {" · "}
-          <Link
-            href="/My_Tutors"
-            className="font-semibold text-[#2f4aa5] hover:underline"
-          >
-            My tutors
-          </Link>
         </p>
       ) : null}
 
       <div className="mx-auto mt-10 max-w-md space-y-4">
-        <GoogleSignInButton label="Sign in with Google" />
+        <GoogleSignInButton label="Sign in with Google" callbackURL={callbackUrl} />
 
         <div className="relative flex items-center py-2">
           <div className="grow border-t border-slate-300" />
@@ -85,18 +95,27 @@ export default function LoginPage() {
         </div>
 
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-slate-700"
-          >
-            Password
-          </label>
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Password
+            </label>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-xs font-semibold text-[#2f4aa5] hover:underline"
+            >
+              Forgot password?
+            </button>
+          </div>
           <input
             id="password"
             name="password"
             type="password"
             required
-            minLength={8}
+            minLength={6}
             placeholder="Enter your password"
             className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-[#2f4aa5] focus:ring-1 focus:ring-[#2f4aa5]"
           />

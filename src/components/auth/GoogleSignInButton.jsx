@@ -3,11 +3,14 @@
 import { FcGoogle } from "react-icons/fc";
 import { authClient } from "@/app/lib/auth-client";
 
-export default function GoogleSignInButton({ label = "Continue with Google" }) {
+export default function GoogleSignInButton({
+  label = "Continue with Google",
+  callbackURL = "/",
+}) {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/My_Booked_Sessions",
+      callbackURL,
     });
   };
 
