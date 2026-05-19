@@ -1,36 +1,58 @@
 "use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { authClient } from "@/app/lib/auth-client";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
+
 export default function LoginPage() {
-  const {data:session,error:sessionError}=authClient.useSession();
-  const user=session?.user;
-  
+  const router = useRouter();
+  const { data: session, error: sessionError } = authClient.useSession();
+  const user = session?.user;
+
   if (sessionError) {
     console.error(sessionError);
   }
-  if (session) {
-    console.log(session);
 
-  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formDataObject = Object.fromEntries(formData);
-    const {data,error}=await authClient.signIn.email({
+    const { data, error } = await authClient.signIn.email({
       email: formDataObject.email,
       password: formDataObject.password,
     });
     if (error) {
       console.error(error);
+      return;
     }
     if (data) {
-      console.log(data);
+      router.push("/My_Booked_Sessions");
     }
   };
+
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">
-      <h1 className="text-3xl font-bold text-center text-[#2f4aa5]">Login</h1>
+      <h1 className="text-center text-3xl font-bold text-[#2f4aa5]">Login</h1>
+
+      {user ? (
+        <p className="mx-auto mt-6 max-w-md text-center text-slate-600">
+          You are already signed in.{" "}
+          <Link
+            href="/My_Booked_Sessions"
+            className="font-semibold text-[#2f4aa5] hover:underline"
+          >
+            Go to my booked sessions
+          </Link>
+          {" · "}
+          <Link
+            href="/My_Tutors"
+            className="font-semibold text-[#2f4aa5] hover:underline"
+          >
+            My tutors
+          </Link>
+        </p>
+      ) : null}
 
       <div className="mx-auto mt-10 max-w-md space-y-4">
         <GoogleSignInButton label="Sign in with Google" />
@@ -46,7 +68,10 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit} className="mx-auto max-w-md space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-slate-700"
+          >
             Email
           </label>
           <input
@@ -87,7 +112,10 @@ export default function LoginPage() {
 
       <p className="mt-6 text-center text-sm text-slate-600">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="font-semibold text-[#2f4aa5] hover:underline">
+        <Link
+          href="/register"
+          className="font-semibold text-[#2f4aa5] hover:underline"
+        >
           Register
         </Link>
       </p>

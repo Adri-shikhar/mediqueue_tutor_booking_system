@@ -7,7 +7,7 @@ export default function GoogleSignInButton({ label = "Continue with Google" }) {
   const handleGoogleSignIn = async () => {
     await authClient.signIn.social({
       provider: "google",
-      callbackURL: "/",
+      callbackURL: "/My_Booked_Sessions",
     });
   };
 

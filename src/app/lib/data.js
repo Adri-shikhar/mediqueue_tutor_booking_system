@@ -41,3 +41,23 @@ export const createBooking = async (booking) => {
   }
   return response.json()
 }
+
+export const getBookingsByUserId = async (userId) => {
+  const response = await fetch(
+    `http://localhost:8000/bookings?user_id=${encodeURIComponent(userId)}`
+  )
+  if (!response.ok) {
+    throw new Error("Failed to fetch bookings")
+  }
+  return response.json()
+}
+
+export const getTutorsByCreatorId = async (userId) => {
+  const response = await fetch(
+    `http://localhost:8000/tutors?createdBy_id=${encodeURIComponent(userId)}`
+  )
+  if (!response.ok) {
+    throw new Error("Failed to fetch your tutors")
+  }
+  return response.json()
+}
