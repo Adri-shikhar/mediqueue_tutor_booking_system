@@ -2,6 +2,7 @@
 
 import { authClient } from "@/app/lib/auth-client";
 import { updateTutor } from "@/app/lib/data";
+import { getBearerToken } from "@/app/lib/get-bearer-token";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
 import DeleteTutorButton from "@/components/Tutor/DeleteTutorButton";
 import { Button, Input, Label, Modal, Surface, TextField } from "@heroui/react";
@@ -88,7 +89,14 @@ export default function TutorActions({ tutor, tutorId }) {
     setLoading(true);
 
     try {
-      await updateTutor(tutorId, tutorData);
+      const token = await getBearerToken();
+      if (!token) {
+        toast.error("Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      await updateTutor(tutorId, tutorData, token);
       toast.success("Tutor updated!");
       router.push("/Tutors/" + tutorId);
       router.refresh();

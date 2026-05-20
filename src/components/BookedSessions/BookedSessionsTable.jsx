@@ -1,6 +1,7 @@
 "use client";
 
 import { updateBooking } from "@/app/lib/data";
+import { getBearerToken } from "@/app/lib/get-bearer-token";
 import { toId } from "@/app/lib/helpers";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,12 +17,19 @@ export default function BookedSessionsTable({ bookings }) {
     setBusyId(id);
 
     try {
+      const token = await getBearerToken();
+      if (!token) {
+        toast.error("Please log in again.");
+        setBusyId("");
+        return;
+      }
+
       const updated = { ...booking };
       delete updated._id;
       updated.status = "cancelled";
 
       // Server will do totalSlot + 1 when status is cancelled
-      await updateBooking(id, updated);
+      await updateBooking(id, updated, token);
       toast.success("Cancelled. 1 slot returned to tutor.");
       router.refresh();
     } catch (error) {

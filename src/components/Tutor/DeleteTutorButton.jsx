@@ -1,6 +1,7 @@
 "use client";
 
 import { deleteTutor } from "@/app/lib/data";
+import { getBearerToken } from "@/app/lib/get-bearer-token";
 import { AlertDialog, Button } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -15,7 +16,14 @@ export default function DeleteTutorButton({ tutorId, tutorName, iconOnly }) {
     setLoading(true);
 
     try {
-      await deleteTutor(tutorId);
+      const token = await getBearerToken();
+      if (!token) {
+        toast.error("Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      await deleteTutor(tutorId, token);
       toast.success("Tutor deleted!");
       router.push("/My_Tutors");
       router.refresh();

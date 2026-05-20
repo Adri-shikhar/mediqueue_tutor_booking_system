@@ -2,6 +2,7 @@
 
 import { authClient } from "@/app/lib/auth-client";
 import { createBooking } from "@/app/lib/data";
+import { getBearerToken } from "@/app/lib/get-bearer-token";
 import { formatDate, toId } from "@/app/lib/helpers";
 import { canBook, getSlots, isFullyBooked } from "@/app/lib/slots";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
@@ -50,6 +51,13 @@ export default function BookingButton({ tutor }) {
     setLoading(true);
 
     try {
+      const token = await getBearerToken();
+      if (!token) {
+        toast.error("Please log in again.");
+        setLoading(false);
+        return;
+      }
+
       // Server will also check slots and do totalSlot - 1
       await createBooking({
         tutorId: tutorId,
@@ -68,7 +76,7 @@ export default function BookingButton({ tutor }) {
         phone: user.phone || "",
         status: "Confirmed",
         createdAt: new Date().toISOString(),
-      });
+      }, token);
 
       toast.success("Session booked! 1 slot used.");
       router.refresh();
@@ -76,12 +84,14 @@ export default function BookingButton({ tutor }) {
     } catch (error) {
       console.error(error);
 
-      if (error.message === "No slots available") {
+      const msg = error?.message || "Booking failed.";
+
+      if (msg === "No slots available") {
         toast.error("No slots left. Tutor is fully booked.");
         setMessage("No slots left.");
       } else {
-        toast.error("Booking failed.");
-        setMessage("Booking failed.");
+        toast.error(msg);
+        setMessage(msg);
       }
 
       router.refresh();

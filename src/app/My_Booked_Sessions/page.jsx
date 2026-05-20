@@ -2,6 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { auth } from "@/app/lib/auth";
 import { getBookingsByUserId } from "@/app/lib/data";
+import { getServerBearerToken } from "@/app/lib/server-token";
 import BookedSessionsTable from "@/components/BookedSessions/BookedSessionsTable";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,10 @@ export default async function MyBookedSessionsPage() {
     );
   }
 
-  const bookings = await getBookingsByUserId(user.id);
+  const token = await getServerBearerToken();
+  const bookings = token
+    ? await getBookingsByUserId(user.id, token)
+    : [];
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-16">

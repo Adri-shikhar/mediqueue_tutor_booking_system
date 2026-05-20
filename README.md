@@ -94,7 +94,14 @@ Set these in **Vercel → Project → Settings → Environment Variables**:
 | `BETTER_AUTH_SECRET` | Strong random secret |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | If using Google login |
 
-Redeploy after updating env vars.
+On your **API host** (Render, Railway, etc.), set:
+
+| Variable | Value |
+|----------|--------|
+| `BETTER_AUTH_URL` | `https://mediqueue-tutor-booking-system.vercel.app` |
+| `BETTER_AUTH_CLIENT_URL` | same as above |
+
+Redeploy **both** API and Vercel after updating env vars. Booking runs in the browser: wrong `NEXT_PUBLIC_BASE_URL`, missing CORS, or wrong `BETTER_AUTH_URL` on the API usually shows a clear toast error.
 
 ---
 

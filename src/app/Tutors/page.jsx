@@ -13,6 +13,8 @@ export default async function TutorsPage({ searchParams }) {
   const registrationStart = params?.registrationStart || "";
   const registrationEnd = params?.registrationEnd || "";
 
+
+
   const tutors = await getTutors({
     name,
     registrationStart,

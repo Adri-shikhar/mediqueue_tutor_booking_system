@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/app/lib/auth-client";
 import { createTutor } from "@/app/lib/data";
+import { getBearerToken } from "@/app/lib/get-bearer-token";
 import { toId } from "@/app/lib/helpers";
 import SessionDatePicker from "@/components/AddTutor/SessionDatePicker";
 import { toast } from "react-toastify";
@@ -47,6 +48,12 @@ export default function AddTutorPage() {
       return;
     }
     try {
+      const token = await getBearerToken();
+      if (!token) {
+        setMessage("Please log in again.");
+        return;
+      }
+
       const result = await createTutor({
         tutorName: formData.get("tutorName"),
         photo: formData.get("photo"),
@@ -64,7 +71,7 @@ export default function AddTutorPage() {
         createdByName: user?.name ?? "",
         createdByEmail: user?.email ?? "",
         createdAt: new Date().toISOString(),
-      });
+      }, token);
 
       const newTutorId = toId(result.insertedId);
       toast.success("Tutor created successfully!");
